@@ -8,10 +8,13 @@ const STORAGE_KEY = 'rrhh-demo-profile';
 
 function aplicarBranding(profile) {
   const r = document.documentElement;
-  r.style.setProperty('--brand', profile.branding.primaryColor);
-  r.style.setProperty('--brand-dark', profile.branding.primaryDark);
-  r.style.setProperty('--brand-soft', profile.branding.primarySoft);
-  r.style.setProperty('--secondary', profile.branding.secondaryColor);
+  // Entradas crudas: index.css deriva de acá los tokens consumidos según el tema.
+  // Escribirlas con el nombre final rompería el tema oscuro — un style en línea
+  // sobre <html> gana a cualquier regla de hoja de estilos.
+  r.style.setProperty('--brand-base', profile.branding.primaryColor);
+  r.style.setProperty('--brand-base-dark', profile.branding.primaryDark);
+  r.style.setProperty('--brand-soft-base', profile.branding.primarySoft);
+  r.style.setProperty('--secondary-base', profile.branding.secondaryColor);
   document.title = profile.company.name + ' — Gestión de Personas';
   const link = document.querySelector('link[rel="icon"]');
   if (link && profile.branding.favicon) link.setAttribute('href', profile.branding.favicon);

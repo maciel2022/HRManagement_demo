@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useSession } from '@/context/SessionContext';
 import { useConfig } from '@/config/ConfigContext';
 import { useAuth } from '@/context/AuthContext';
-import { Icon } from '@/components/ui';
+import { Icon, ThemeToggle } from '@/components/ui';
 import { catalogoApi } from '@/api';
 import { getDb } from '@/data/database';
 import { HOY } from '@/data/catalogos';
@@ -111,6 +111,8 @@ export default function Topbar({ onQuickAction }) {
           </div>
         )}
       </div>
+
+      <ThemeToggle />
 
       <div className="relative">
         <button

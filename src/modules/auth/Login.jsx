@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useConfig } from '@/config/ConfigContext';
 import { useAuth } from '@/context/AuthContext';
-import { Icon } from '@/components/ui';
+import { Icon, ThemeToggle } from '@/components/ui';
 import { ACCESO_DEMO, CLIENT_SWITCHER_ENABLED, DEMO_ENV_LABEL } from '@/config/demo.config';
 
 const DESTACADOS = [
@@ -108,6 +108,9 @@ export default function Login() {
       {/* Formulario */}
       <main className="flex-1 flex items-center justify-center px-5 py-10 sm:px-8 lg:py-12">
         <div className="w-full max-w-[420px]">
+          <div className="flex justify-end mb-3">
+            <ThemeToggle />
+          </div>
           <div className="mb-6">
             <h2 className="m-0 mb-[6px] text-[23px] font-extrabold tracking-[-.5px]">Iniciar sesión</h2>
             <p className="m-0 text-[13px] text-muted">Ingresá con tu cuenta corporativa para acceder al sistema.</p>
