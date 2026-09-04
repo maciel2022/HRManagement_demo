@@ -14,7 +14,7 @@ import Administracion from './administracion/Administracion';
 
 // Registro único de módulos: el sidebar, el router y los títulos salen de acá.
 export const MODULOS = [
-  { id: 'inicio', label: 'Inicio', icon: 'space_dashboard', titulo: 'Panel de Recursos Humanos', sub: 'Resumen operativo de la red al 03/09/2026', Component: Inicio },
+  { id: 'inicio', label: 'Inicio', icon: 'space_dashboard', titulo: 'Dashboard Recursos Humanos', sub: 'Resumen operativo de la red al 03/09/2026', Component: Inicio },
   { id: 'empleados', label: 'Empleados', icon: 'groups', titulo: 'Empleados', sub: 'Directorio, legajos y perfiles del personal', Component: Empleados },
   { id: 'asistencia', label: 'Asistencia', icon: 'schedule', titulo: 'Asistencia', sub: 'Fichadas, incidencias y control diario de presentismo', Component: Asistencia },
   { id: 'turnos', label: 'Turnos', icon: 'calendar_view_week', titulo: 'Turnos', sub: 'Programación de turnos y cobertura por estación', Component: Turnos },
@@ -26,7 +26,7 @@ export const MODULOS = [
   { id: 'capacitaciones', label: 'Capacitaciones', icon: 'school', titulo: 'Capacitaciones', sub: 'Cursos obligatorios y cumplimiento por sucursal', Component: Capacitaciones },
   { id: 'anuncios', label: 'Anuncios', icon: 'campaign', titulo: 'Anuncios', sub: 'Comunicados internos a la red', Component: Anuncios },
   { id: 'reportes', label: 'Reportes', icon: 'bar_chart', titulo: 'Reportes', sub: 'Informes de RRHH con filtros y exportación', Component: Reportes },
-  { id: 'admin', label: 'Administración', icon: 'settings', titulo: 'Administración', sub: 'Sucursales, áreas, puestos, turnos, feriados y permisos', Component: Administracion }
+  { id: 'admin', label: 'Configuración', icon: 'settings', titulo: 'Administración', sub: 'Sucursales, áreas, puestos, turnos, feriados y permisos', Component: Administracion }
 ];
 
 export const moduloPorId = (id) => MODULOS.find((m) => m.id === id) ?? MODULOS[0];
