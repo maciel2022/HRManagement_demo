@@ -26,7 +26,7 @@ export const MODULOS = [
   { id: 'capacitaciones', label: 'Capacitaciones', icon: 'school', titulo: 'Capacitaciones', sub: 'Cursos obligatorios y cumplimiento por sucursal', Component: Capacitaciones },
   { id: 'anuncios', label: 'Anuncios', icon: 'campaign', titulo: 'Anuncios', sub: 'Comunicados internos a la red', Component: Anuncios },
   { id: 'reportes', label: 'Reportes', icon: 'bar_chart', titulo: 'Reportes', sub: 'Informes de RRHH con filtros y exportación', Component: Reportes },
-  { id: 'admin', label: 'Configuración', icon: 'settings', titulo: 'Administración', sub: 'Sucursales, áreas, puestos, turnos, feriados y permisos', Component: Administracion }
+  { id: 'admin', label: 'Configuración', icon: 'settings', titulo: 'Configuración', sub: 'Sucursales, áreas, puestos, turnos, feriados y permisos', Component: Administracion }
 ];
 
 export const moduloPorId = (id) => MODULOS.find((m) => m.id === id) ?? MODULOS[0];
