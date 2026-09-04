@@ -31,7 +31,7 @@ export default function Anuncios({ accion, onAccionConsumida }) {
     <div className="grid gap-4 items-start grid-cols-2">
       <div className="flex flex-col gap-3">
         <div className="card flex items-center gap-[10px] px-[15px] py-3">
-          <span className="font-mono text-xs text-[#8b8880]">{sinLeer} sin leer</span>
+          <span className="font-mono text-xs text-muted3">{sinLeer} sin leer</span>
           <div className="flex-1" />
           <button
             className="btn-ghost"
@@ -60,11 +60,11 @@ export default function Anuncios({ accion, onAccionConsumida }) {
                 setLeidos((l) => ({ ...l, [a.id]: true }));
                 await anunciosApi.marcarLeido(a.id, ctx);
               }}
-              className="bg-surface rounded-[13px] px-[17px] py-[15px] cursor-pointer hover:bg-[#faf9f7]"
-              style={{ border: '1.5px solid ' + (selId === a.id ? '#12665c' : '#e6e3dd') }}
+              className="bg-surface rounded-[13px] px-[17px] py-[15px] cursor-pointer hover:bg-surface2"
+              style={{ border: '1.5px solid ' + (selId === a.id ? 'var(--brand)' : 'var(--line)') }}
             >
               <div className="flex items-center gap-[10px] mb-[7px]">
-                <span className="w-[7px] h-[7px] rounded-full" style={{ background: leido ? 'transparent' : '#a83232' }} />
+                <span className="w-[7px] h-[7px] rounded-full" style={{ background: leido ? 'transparent' : 'var(--bad-fg)' }} />
                 <span className={'flex-1 text-[13.5px] ' + (leido ? 'font-semibold' : 'font-extrabold')}>{a.title}</span>
                 <span className="chip" style={{ background: t.bg, color: t.fg }}>
                   {a.priority}
@@ -91,8 +91,8 @@ export default function Anuncios({ accion, onAccionConsumida }) {
               </span>
             </div>
             <h2 className="m-0 mb-3 text-[21px] font-extrabold tracking-[-.4px] leading-tight">{sel.title}</h2>
-            <div className="text-sm leading-[1.7] text-[#3d3b36] text-pretty">{sel.body}</div>
-            <div className="mt-5 pt-4 border-t border-line2 flex gap-5 font-mono text-[11.5px] text-[#8b8880]">
+            <div className="text-sm leading-[1.7] text-ink2 text-pretty">{sel.body}</div>
+            <div className="mt-5 pt-4 border-t border-line2 flex gap-5 font-mono text-[11.5px] text-muted3">
               <span>Publicado {sel.published_at}</span>
               <span>Autor: {sel.author}</span>
             </div>

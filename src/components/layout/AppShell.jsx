@@ -23,7 +23,7 @@ export default function AppShell() {
               <h1 className="m-0 mb-[5px] text-[25px] font-extrabold tracking-[-.5px]">{modulo.titulo}</h1>
               <p className="m-0 text-[13px] text-muted">{modulo.sub}</p>
             </div>
-            <div className="font-mono text-xs text-[#8b8880] whitespace-nowrap">{HOY.largo}</div>
+            <div className="font-mono text-xs text-muted3 whitespace-nowrap">{HOY.largo}</div>
           </div>
           <div className="min-w-0 animate-fade" key={ruta}>
             <Modulo accion={accion} onAccionConsumida={() => setAccion(null)} />

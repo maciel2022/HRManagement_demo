@@ -12,10 +12,13 @@
 
 ## Global Constraints
 
-- **The light theme must not change.** Every light token value in this plan is the exact hex already in the codebase. Light-theme screenshots must match the Task 0 baseline.
+- **The light theme must not change**, with one approved exception (below). Every other light token value in this plan is the exact hex already in the codebase.
+- **APPROVED EXCEPTION — tono `warn` (decisión del 2026-09-04):** `#9a6a10` sobre `#fbf1de` da 4.22:1 y no cumple AA. Se corrige a **`#93650f`** (4.56:1), imperceptible a simple vista. Hay que cambiarlo en **dos** lugares: el token `--warn-fg` en `index.css` y la entrada `'#fbf1de': '#9a6a10'` del mapa `HUE_FG` en `data/generador.js` — es el mismo par de color en los avatares.
+- **Deuda conocida y aceptada del tema claro:** `muted` (#7c7a72, 4.30:1), `muted3` (#8b8880, 3.54:1) y `muted2` (#a5a29a, 2.55:1) no cumplen AA. **No se tocan**: llevarlos a 4.5:1 exige oscurecerlos a ~#6f6d66 y colapsaría los tres niveles de jerarquía gris en uno solo, que es un rediseño. La auditoría los tolera mediante una lista explícita (`DEUDA_CLARO`) y falla ante cualquier *otro* fallo en claro.
+- **La auditoría exige AA completo en el tema OSCURO.** Cero tolerancia ahí: la paleta oscura se diseña desde cero y no tiene por qué heredar deuda.
 - **No behavior changes.** No component's props, state, event handlers, or rendered structure change except where this plan says so explicitly.
 - **`src/config/demo.config.js` is not modified.** Client profiles must learn nothing about themes.
-- **`src/data/generador.js` is not modified.** Its 21 hex are avatar identity data (`HUES` + `HUE_FG`), each light tint paired with its own dark foreground, legible in both themes.
+- **`src/data/generador.js` is not tokenized** (una sola excepción: el valor `warn` de arriba). Its 21 hex are avatar identity data (`HUES` + `HUE_FG`), each light tint paired with its own dark foreground, legible in both themes.
 - **No hardcoded color may remain** in `src/**/*.jsx` outside those two files. The exit check is a grep that must return empty.
 - **Contrast floor:** WCAG AA — 4.5:1 for normal text, 3:1 for text ≥18.66px bold or ≥24px.
 - **Storage keys already in use — do not collide:** `rrhh-demo-profile`, `rrhh-demo-auth`. The new one is `rrhh-demo-theme`.
@@ -1184,3 +1187,77 @@ pkill -f "remote-debugging-port=9222"; pkill -f "vite --no-open --port 5199"
 - **When a contrast failure has two fixes** — change the token or change the component — change the token. The whole point is one source of truth.
 - **`color-mix()` fallback:** if the derived brand renders wrong, check browser support before rewriting the approach. Chrome/Edge 111+, Safari 16.2+, Firefox 113+.
 - **The audit cannot see closed overlays.** Modals, dropdowns and the notification panel must be opened explicitly (Tasks 9 Step 4). A green audit with every overlay closed proves nothing about them.
+
+---
+
+## Resultado de la Tarea 11 (verificación)
+
+Todo verde. Lo que sigue son los hallazgos que la verificación destapó y que
+valen más que el resultado.
+
+### La auditoría de contraste no alcanza para probar fidelidad
+
+Mide legibilidad, no parecido. Con las 26 auditorías en verde, el tema claro
+igual se había movido en **cuatro** lugares: el barrido mapeó literales a tokens
+de valor cercano pero distinto.
+
+| Elemento | Original | Tras el barrido |
+|---|---|---|
+| Rótulo inactivo de la barra lateral | `#4a4842` | `#55534c` (`--ink-2`) |
+| Fondo de las tiras de pestañas | `#efeee9` | `#f2f0ec` (`--surface-3`) |
+| Borde de acción destructiva | `#f0d4d4` | `#fbeaea` (`--bad-bg`) |
+| Bordes punteados y chevron | `#cfcac1` | `#e2ded6` (`--line-strong`) |
+
+Se corrigieron agregando cuatro tokens con el valor claro exacto del original y
+su contraparte oscura: `--ink-3`, `--surface-sunken`, `--bad-line`,
+`--line-dashed`. Lo que lo detectó fue la comparación píxel a píxel contra el
+commit previo (`6b53ff4`) servido en paralelo, no la auditoría.
+
+### El arnés falló en verde tres veces
+
+Cada una habría dado por buena una verificación vacía:
+
+1. **Extracción vacía.** Los scripts de capas levantan la función de contraste
+   del archivo de auditoría por índice de texto. El marcador no coincidía, la
+   extracción dio cadena vacía, `try { return ; }` devolvió `undefined` y
+   `fallos && fallos.length` lo leyó como "sin fallos". 13 capas dieron OK sin
+   medir nada. Hoy la extracción se valida al cargar.
+2. **Capa equivocada.** Los desplegables del encabezado no cierran con clic
+   afuera, así que el menú de usuario quedaba abierto y `querySelector` lo
+   devolvía antes que el modal. Todos los modales se midieron como si fueran ese
+   menú. Hoy cada clase de capa tiene su selector y su cierre, y se exige que no
+   queden capas abiertas entre mediciones.
+3. **Aserciones obsoletas.** La prueba de ingreso comparaba `--brand` contra
+   hexes fijos; ese token ahora se deriva. Apunta a `--brand-base`, la entrada
+   cruda.
+
+**Regla:** una auditoría que sólo puede dar OK no es una auditoría. Antes de
+confiar en un verde, hay que verla ponerse roja — acá se hizo corriendo la
+auditoría de capas en tema claro, donde los grises de deuda conocida aparecen.
+
+### Fallo real encontrado y corregido
+
+Numeral de paso pendiente del asistente Hikvision: `--muted-2` sobre
+`--surface-3` daba 4.3:1 en oscuro. Ese chip es más claro que la superficie del
+modal, así que el token que alcanzaba en el resto del modal no alcanzaba ahí.
+Pasó a `--muted` (5.45:1); la etiqueta conserva `--muted-2`, que sobre la
+superficie del modal da 5.04:1, así que la jerarquía se mantiene.
+
+### Límite previo, no regresión
+
+El armazón del tablero desborda 491px a 390px de ancho. Es idéntico en claro y
+en oscuro, y en los componentes de disposición esta rama cambió sólo clases de
+color. Es de escritorio desde antes de este trabajo; corregirlo sería un
+rediseño, explícitamente fuera de alcance. La comprobación móvil verifica
+**paridad entre temas**, no desborde cero.
+
+### Cobertura final
+
+- Contraste: 26/26 módulos × 3 inquilinos, ambos temas — sin fallos.
+- Capas: 19 (4 desplegables, 10 modales, 6 pasos del asistente, recibo,
+  asignación de turno, aviso flotante) en oscuro — sin fallos.
+- Ingreso: 27/27.
+- Persistencia: 10/10, incluida la preferencia del sistema en ambos sentidos.
+- Fidelidad del tema claro: fuera del encabezado, el cuerpo difiere sólo en las
+  insignias y barras de tono `warn` — el único cambio aprobado.
+- Consola: sin errores. `npm run build`: correcto.

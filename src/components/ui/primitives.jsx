@@ -57,15 +57,15 @@ export function Panel({ title, subtitle, right, children, bodyClassName = '' }) 
   );
 }
 
-export function ProgressBar({ pct, color = '#12665c', height = 8 }) {
+export function ProgressBar({ pct, color = 'var(--brand)', height = 8 }) {
   return (
-    <div className="flex-1 rounded-md overflow-hidden bg-[#f2f0ec]" style={{ height }}>
+    <div className="flex-1 rounded-md overflow-hidden bg-surface3" style={{ height }}>
       <div className="h-full rounded-md" style={{ width: pct + '%', background: color }} />
     </div>
   );
 }
 
-export function BarList({ items, color = '#12665c', labelWidth = 100 }) {
+export function BarList({ items, color = 'var(--brand)', labelWidth = 100 }) {
   const max = Math.max(...items.map((i) => i.value), 1);
   return (
     <div className="flex flex-col gap-[9px]">
@@ -82,12 +82,12 @@ export function BarList({ items, color = '#12665c', labelWidth = 100 }) {
   );
 }
 
-export function ColumnChart({ title, subtitle, items, color = '#1f7a4d' }) {
+export function ColumnChart({ title, subtitle, items, color = 'var(--ok-fg)' }) {
   const max = Math.max(...items.map((i) => i.value), 1);
   return (
     <Card className="px-[18px]">
       <div className="text-[13px] font-bold">{title}</div>
-      {subtitle && <div className="text-[11.5px] text-[#8b8880] mb-4">{subtitle}</div>}
+      {subtitle && <div className="text-[11.5px] text-muted3 mb-4">{subtitle}</div>}
       <div className="flex items-end gap-[9px] h-[108px]">
         {items.map((i) => (
           <div key={i.label} className="flex-1 flex flex-col items-center justify-end gap-[6px] h-full">
@@ -104,9 +104,9 @@ export function ColumnChart({ title, subtitle, items, color = '#1f7a4d' }) {
   );
 }
 
-export function EmptyState({ icon = 'inbox', title, body, tone = '#a5a29a' }) {
+export function EmptyState({ icon = 'inbox', title, body, tone = 'var(--muted-2)' }) {
   return (
-    <div className="bg-surface border border-dashed border-[#cfcac1] rounded-[14px] p-11 text-center">
+    <div className="bg-surface border border-dashed border-linedashed rounded-[14px] p-11 text-center">
       <Icon name={icon} size={34} className="block mb-[10px]" style={{ color: tone }} />
       <div className="text-sm font-bold">{title}</div>
       {body && <div className="text-[12.5px] text-muted mt-1">{body}</div>}
@@ -117,8 +117,8 @@ export function EmptyState({ icon = 'inbox', title, body, tone = '#a5a29a' }) {
 export function Toast({ message }) {
   if (!message) return null;
   return (
-    <div className="fixed right-6 bottom-6 z-[200] flex items-center gap-[11px] px-[17px] py-[13px] bg-ink text-white rounded-xl shadow-2xl text-[13px] font-semibold animate-pop max-w-[380px]">
-      <Icon name="check_circle" size={19} style={{ color: '#7fd1b9' }} />
+    <div className="fixed right-6 bottom-6 z-[200] flex items-center gap-[11px] px-[17px] py-[13px] bg-toast text-toastink rounded-xl shadow-2xl text-[13px] font-semibold animate-pop max-w-[380px]">
+      <Icon name="check_circle" size={19} style={{ color: 'var(--toast-accent)' }} />
       {message}
     </div>
   );
@@ -127,7 +127,7 @@ export function Toast({ message }) {
 export function FilterBar({ children, right }) {
   return (
     <div className="card flex items-center gap-[10px] flex-wrap px-[15px] py-[13px]">
-      <Icon name="filter_alt" size={19} className="text-[#8b8880]" />
+      <Icon name="filter_alt" size={19} className="text-muted3" />
       {children}
       <div className="flex-1" />
       {right}
@@ -141,7 +141,7 @@ export function Select({ value, onChange, options, prefix, className = '' }) {
       value={value}
       onChange={(e) => onChange(e.target.value)}
       className={
-        'px-[10px] py-[7px] border border-[#e2ded6] rounded-lg bg-[#faf9f7] text-[12.5px] font-semibold cursor-pointer ' +
+        'px-[10px] py-[7px] border border-linestrong rounded-lg bg-surface2 text-[12.5px] font-semibold cursor-pointer ' +
         className
       }
     >

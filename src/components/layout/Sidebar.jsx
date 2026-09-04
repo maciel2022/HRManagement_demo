@@ -32,14 +32,14 @@ export default function Sidebar() {
       <div className="relative border-b border-line2">
         <button
           onClick={() => CLIENT_SWITCHER_ENABLED && setAbierto((a) => !a)}
-          className="w-full px-5 pt-5 pb-4 flex items-center gap-[11px] text-left hover:bg-[#faf9f7]"
+          className="w-full px-5 pt-5 pb-4 flex items-center gap-[11px] text-left hover:bg-surface2"
         >
-          <div className="w-9 h-9 rounded-[10px] bg-brand text-white grid place-items-center font-extrabold text-[15px] tracking-[-.5px] shrink-0">
+          <div className="w-9 h-9 rounded-[10px] bg-brand text-brandink grid place-items-center font-extrabold text-[15px] tracking-[-.5px] shrink-0">
             {empresa.initials}
           </div>
           <div className="min-w-0 flex-1">
             <div className="text-sm font-bold tracking-[-.2px] truncate">{empresa.name}</div>
-            <div className="text-[11px] text-[#8b8880] font-medium truncate">{empresa.tagline}</div>
+            <div className="text-[11px] text-muted3 font-medium truncate">{empresa.tagline}</div>
           </div>
           {CLIENT_SWITCHER_ENABLED && <Icon name="unfold_more" size={17} className="text-muted2 shrink-0" />}
         </button>
@@ -57,7 +57,7 @@ export default function Sidebar() {
                   setAbierto(false);
                 }}
                 className={
-                  'flex items-center gap-[10px] w-full text-left px-[10px] py-[9px] rounded-lg hover:bg-[#f2f0ec] ' +
+                  'flex items-center gap-[10px] w-full text-left px-[10px] py-[9px] rounded-lg hover:bg-surface3 ' +
                   (profileId === p.id ? 'bg-brand-soft' : '')
                 }
               >
@@ -91,7 +91,7 @@ export default function Sidebar() {
               onClick={() => setRuta(m.id)}
               className={
                 'flex items-center gap-[11px] w-full text-left px-[11px] py-[9px] rounded-[9px] text-[13.5px] font-semibold ' +
-                (on ? 'bg-brand-soft text-brand' : 'text-[#4a4842] hover:bg-[#f2f0ec]')
+                (on ? 'bg-brand-soft text-brand' : 'text-ink3 hover:bg-surface3')
               }
             >
               <Icon name={m.icon} size={20} />
@@ -111,7 +111,7 @@ export default function Sidebar() {
         <select
           value={rol}
           onChange={(e) => setRol(e.target.value)}
-          className="w-full px-[9px] py-2 border border-[#e2ded6] rounded-lg bg-[#faf9f7] text-[12.5px] font-semibold cursor-pointer"
+          className="w-full px-[9px] py-2 border border-linestrong rounded-lg bg-surface2 text-[12.5px] font-semibold cursor-pointer"
         >
           {ROLES.map((r) => (
             <option key={r.name} value={r.name}>
@@ -119,7 +119,7 @@ export default function Sidebar() {
             </option>
           ))}
         </select>
-        <div className="mt-2 text-[11px] text-[#8b8880] leading-[1.45]">{ROLES.find((r) => r.name === rol)?.desc}</div>
+        <div className="mt-2 text-[11px] text-muted3 leading-[1.45]">{ROLES.find((r) => r.name === rol)?.desc}</div>
 
         <div className="mt-3 pt-3 border-t border-line2 flex items-center gap-[7px] text-[10.5px] font-semibold text-muted2">
           <span className="w-[6px] h-[6px] rounded-full bg-brand" />

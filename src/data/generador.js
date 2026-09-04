@@ -5,7 +5,7 @@ import { NOMBRES_M, NOMBRES_F, APELLIDOS, CALLES, CONTRATOS, TIPOS_LICENCIA } fr
 
 const HUES = ['#e6f0ee', '#f0eaf9', '#e9eff9', '#fbf1de', '#e7f3ec', '#fbeaea', '#eeece7'];
 const HUE_FG = {
-  '#e6f0ee': '#12665c', '#f0eaf9': '#6b4a9e', '#e9eff9': '#2f5fa8', '#fbf1de': '#9a6a10',
+  '#e6f0ee': '#12665c', '#f0eaf9': '#6b4a9e', '#e9eff9': '#2f5fa8', '#fbf1de': '#93650f',
   '#e7f3ec': '#1f7a4d', '#fbeaea': '#a83232', '#eeece7': '#6b6a63'
 };
 

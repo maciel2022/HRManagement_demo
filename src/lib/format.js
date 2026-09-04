@@ -33,13 +33,15 @@ export const horas = (h) => (h ? h + ':00' : '—');
 
 export const pct = (a, b) => (b ? Math.round((a / b) * 100) : 0);
 
+// Los valores son variables CSS: el mismo objeto sirve para ambos temas y la
+// forma {fg, bg} no cambia, así que ningún punto de uso de insignias se toca.
 export const TONOS = {
-  ok: { fg: '#1f7a4d', bg: '#e7f3ec' },
-  warn: { fg: '#9a6a10', bg: '#fbf1de' },
-  bad: { fg: '#a83232', bg: '#fbeaea' },
-  info: { fg: '#2f5fa8', bg: '#e9eff9' },
-  vio: { fg: '#6b4a9e', bg: '#f0eaf9' },
-  grey: { fg: '#6b6a63', bg: '#eeece7' },
+  ok: { fg: 'var(--ok-fg)', bg: 'var(--ok-bg)' },
+  warn: { fg: 'var(--warn-fg)', bg: 'var(--warn-bg)' },
+  bad: { fg: 'var(--bad-fg)', bg: 'var(--bad-bg)' },
+  info: { fg: 'var(--info-fg)', bg: 'var(--info-bg)' },
+  vio: { fg: 'var(--vio-fg)', bg: 'var(--vio-bg)' },
+  grey: { fg: 'var(--grey-fg)', bg: 'var(--grey-bg)' },
   brand: { fg: 'var(--brand)', bg: 'var(--brand-soft)' }
 };
 

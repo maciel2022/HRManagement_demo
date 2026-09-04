@@ -1,4 +1,5 @@
 import { ConfigProvider } from '@/config/ConfigContext';
+import { ThemeProvider } from '@/context/ThemeContext';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { SessionProvider } from '@/context/SessionContext';
 import AppShell from '@/components/layout/AppShell';
@@ -17,9 +18,11 @@ function Ruteo() {
 export default function App() {
   return (
     <ConfigProvider>
-      <AuthProvider>
-        <Ruteo />
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <Ruteo />
+        </AuthProvider>
+      </ThemeProvider>
     </ConfigProvider>
   );
 }

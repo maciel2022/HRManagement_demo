@@ -51,8 +51,8 @@ export default function Reportes() {
           <button
             key={r.n}
             onClick={() => setSel(r.n)}
-            className="text-left rounded-[13px] px-4 py-[15px] flex gap-[11px] items-start hover:bg-[#faf9f7]"
-            style={{ border: '1.5px solid ' + (sel === r.n ? '#12665c' : '#e6e3dd'), background: sel === r.n ? '#faf9f7' : '#fff' }}
+            className="text-left rounded-[13px] px-4 py-[15px] flex gap-[11px] items-start hover:bg-surface2"
+            style={{ border: '1.5px solid ' + (sel === r.n ? 'var(--brand)' : 'var(--line)'), background: sel === r.n ? 'var(--surface-2)' : 'var(--surface)' }}
           >
             <span className="w-8 h-8 shrink-0 rounded-[9px] grid place-items-center bg-brand-soft text-brand">
               <Icon name={r.i} size={18} />
@@ -85,8 +85,8 @@ export default function Reportes() {
           </div>
           <div className="flex gap-2 flex-wrap">
             {chips.map(([l, v]) => (
-              <span key={l} className="flex items-center gap-[6px] px-[11px] py-[6px] border border-[#e2ded6] rounded-full bg-[#faf9f7] text-[11.5px]">
-                <span className="font-bold text-[#8b8880]">{l}:</span>
+              <span key={l} className="flex items-center gap-[6px] px-[11px] py-[6px] border border-linestrong rounded-full bg-surface2 text-[11.5px]">
+                <span className="font-bold text-muted3">{l}:</span>
                 <span className="font-bold">{v}</span>
               </span>
             ))}

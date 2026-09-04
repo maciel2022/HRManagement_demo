@@ -26,7 +26,7 @@ export default function ReciboModal({ emp, periodo, onClose, onConfirm }) {
       onClose={onClose}
       footer={<ModalFooter confirmLabel="Descargar PDF" onCancel={onClose} onConfirm={onConfirm} />}
     >
-      <div className="grid grid-cols-2 gap-3 px-4 py-[15px] bg-[#faf9f7] border border-line2 rounded-xl mb-4">
+      <div className="grid grid-cols-2 gap-3 px-4 py-[15px] bg-surface2 border border-line2 rounded-xl mb-4">
         {[
           ['Empleado', emp.full],
           ['Legajo / CUIL', emp.legajo + ' · ' + emp.cuil],
@@ -42,7 +42,7 @@ export default function ReciboModal({ emp, periodo, onClose, onConfirm }) {
 
       <table className="w-full border-collapse text-[12.5px]">
         <thead>
-          <tr className="bg-[#faf9f7]">
+          <tr className="bg-surface2">
             <th className="th">Concepto</th>
             <th className="th">Cant.</th>
             <th className="th text-right">Remunerativo</th>
@@ -61,7 +61,7 @@ export default function ReciboModal({ emp, periodo, onClose, onConfirm }) {
         </tbody>
       </table>
 
-      <div className="flex justify-end gap-6 px-3 pt-[15px] mt-2 border-t-2 border-[#efeee9]">
+      <div className="flex justify-end gap-6 px-3 pt-[15px] mt-2 border-t-2 border-sunken">
         {[
           ['Total bruto', ars(d.bruto), ''],
           ['Descuentos', '− ' + ars(d.aportes), 'text-bad'],

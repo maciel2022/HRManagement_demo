@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useSession } from '@/context/SessionContext';
 import { useConfig } from '@/config/ConfigContext';
 import { useAuth } from '@/context/AuthContext';
-import { Icon } from '@/components/ui';
+import { Icon, ThemeToggle } from '@/components/ui';
 import { catalogoApi } from '@/api';
 import { getDb } from '@/data/database';
 import { HOY } from '@/data/catalogos';
@@ -20,11 +20,11 @@ export default function Topbar({ onQuickAction }) {
   const sucursales = [todasLasSucursales, ...catalogoApi.sucursalesNombres()];
 
   const notifs = [
-    { icon: 'assignment_late', color: '#a83232', title: 'Certificado médico pendiente', body: 'Una licencia del 01/09 quedó sin certificado adjunto.', time: 'Hoy 08:15', ruta: 'vacaciones' },
-    { icon: 'schedule', color: '#9a6a10', title: '3 llegadas tarde en la semana', body: db.branches[2].name + ', turno Mañana.', time: 'Hoy 07:52', ruta: 'asistencia' },
-    { icon: 'beach_access', color: '#2f5fa8', title: '6 solicitudes esperando aprobación', body: 'Vacaciones y licencias en etapa Supervisor.', time: 'Ayer 18:30', ruta: 'vacaciones' },
-    { icon: 'request_quote', color: '#9a6a10', title: '4 adelantos solicitados', body: 'Pendientes de revisión para la liquidación de septiembre.', time: 'Ayer 16:04', ruta: 'adelantos' },
-    { icon: 'folder_shared', color: '#a83232', title: 'Documentación por vencer', body: db.documents.filter((d) => d.status === 'Próximo a vencer').length + ' documentos vencen en los próximos 30 días.', time: '01/09 11:20', ruta: 'documentacion' },
+    { icon: 'assignment_late', color: 'var(--bad-fg)', title: 'Certificado médico pendiente', body: 'Una licencia del 01/09 quedó sin certificado adjunto.', time: 'Hoy 08:15', ruta: 'vacaciones' },
+    { icon: 'schedule', color: 'var(--warn-fg)', title: '3 llegadas tarde en la semana', body: db.branches[2].name + ', turno Mañana.', time: 'Hoy 07:52', ruta: 'asistencia' },
+    { icon: 'beach_access', color: 'var(--info-fg)', title: '6 solicitudes esperando aprobación', body: 'Vacaciones y licencias en etapa Supervisor.', time: 'Ayer 18:30', ruta: 'vacaciones' },
+    { icon: 'request_quote', color: 'var(--warn-fg)', title: '4 adelantos solicitados', body: 'Pendientes de revisión para la liquidación de septiembre.', time: 'Ayer 16:04', ruta: 'adelantos' },
+    { icon: 'folder_shared', color: 'var(--bad-fg)', title: 'Documentación por vencer', body: db.documents.filter((d) => d.status === 'Próximo a vencer').length + ' documentos vencen en los próximos 30 días.', time: '01/09 11:20', ruta: 'documentacion' },
     { icon: 'upload_file', color: 'var(--brand)', title: 'Fichadas sin importar', body: 'Último archivo procesado: 31/08/2026.', time: '01/09 07:00', ruta: 'asistencia' }
   ];
 
@@ -37,7 +37,7 @@ export default function Topbar({ onQuickAction }) {
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-[rgba(255,255,255,.92)] backdrop-blur border-b border-line px-[26px] h-[66px] flex items-center gap-[14px]">
+    <header className="sticky top-0 z-40 bg-translucent backdrop-blur border-b border-line px-[26px] h-[66px] flex items-center gap-[14px]">
       <div className="relative flex-1 max-w-[380px]">
         <Icon name="search" size={19} className="absolute left-[11px] top-1/2 -translate-y-1/2 text-muted2" />
         <input
@@ -45,7 +45,7 @@ export default function Topbar({ onQuickAction }) {
           onChange={(e) => setQ(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && setRuta('empleados')}
           placeholder="Buscar empleado, legajo o DNI…"
-          className="w-full pl-[37px] pr-3 py-[9px] border border-[#e2ded6] rounded-[10px] bg-[#faf9f7] text-[13px] outline-none focus:border-brand"
+          className="w-full pl-[37px] pr-3 py-[9px] border border-linestrong rounded-[10px] bg-surface2 text-[13px] outline-none focus:border-brand"
         />
       </div>
 
@@ -73,12 +73,12 @@ export default function Topbar({ onQuickAction }) {
                   toastMsg('Sucursal: ' + s);
                 }}
                 className={
-                  'flex items-center justify-between gap-2 w-full text-left px-[10px] py-[9px] rounded-lg text-[12.5px] font-semibold hover:bg-[#f2f0ec] ' +
+                  'flex items-center justify-between gap-2 w-full text-left px-[10px] py-[9px] rounded-lg text-[12.5px] font-semibold hover:bg-surface3 ' +
                   (sucursal === s ? 'bg-brand-soft' : '')
                 }
               >
                 <span className="truncate">{s}</span>
-                <span className="font-mono text-[11px] text-[#8b8880]">
+                <span className="font-mono text-[11px] text-muted3">
                   {s === todasLasSucursales ? catalogoApi.totalEmpleados() : catalogoApi.porSucursal(s)}
                 </span>
               </button>
@@ -102,7 +102,7 @@ export default function Topbar({ onQuickAction }) {
                   setRuta(a.ruta);
                   onQuickAction?.(a.key);
                 }}
-                className="flex items-center gap-[10px] w-full text-left px-[10px] py-[9px] rounded-lg text-[12.5px] font-semibold hover:bg-[#f2f0ec]"
+                className="flex items-center gap-[10px] w-full text-left px-[10px] py-[9px] rounded-lg text-[12.5px] font-semibold hover:bg-surface3"
               >
                 <Icon name={a.icon} size={18} className="text-brand" />
                 {a.label}
@@ -112,14 +112,16 @@ export default function Topbar({ onQuickAction }) {
         )}
       </div>
 
+      <ThemeToggle />
+
       <div className="relative">
         <button
           onClick={() => toggle('notif')}
-          className="relative w-[38px] h-[38px] border border-[#e2ded6] rounded-[10px] bg-surface hover:bg-[#faf9f7] grid place-items-center"
+          className="relative w-[38px] h-[38px] border border-linestrong rounded-[10px] bg-surface hover:bg-surface2 grid place-items-center"
           aria-label="Notificaciones"
         >
           <Icon name="notifications" size={20} className="text-ink2" />
-          <span className="absolute -top-[5px] -right-[5px] min-w-[18px] h-[18px] px-1 rounded-full bg-bad text-white text-[10.5px] font-bold grid place-items-center">
+          <span className="absolute -top-[5px] -right-[5px] min-w-[18px] h-[18px] px-1 rounded-full bg-bad text-surface text-[10.5px] font-bold grid place-items-center">
             {leidas ? 0 : notifs.length}
           </span>
         </button>
@@ -145,7 +147,7 @@ export default function Topbar({ onQuickAction }) {
                     setRuta(n.ruta);
                     setAbierto(null);
                   }}
-                  className={'flex gap-[11px] w-full text-left px-[15px] py-3 border-b border-canvas hover:bg-[#faf9f7] ' + (leidas ? 'bg-surface' : 'bg-[#fdfcfa]')}
+                  className={'flex gap-[11px] w-full text-left px-[15px] py-3 border-b border-canvas hover:bg-surface2 ' + (leidas ? 'bg-surface' : 'bg-surface2')}
                 >
                   <Icon name={n.icon} size={19} style={{ color: n.color }} className="mt-[1px]" />
                   <span className="flex-1 min-w-0">
@@ -160,10 +162,10 @@ export default function Topbar({ onQuickAction }) {
         )}
       </div>
 
-      <div className="relative pl-[14px] border-l border-[#ebe8e2]">
+      <div className="relative pl-[14px] border-l border-line">
         <button
           onClick={() => toggle('user')}
-          className="flex items-center gap-[10px] rounded-[10px] px-1 py-1 -mx-1 hover:bg-[#f2f0ec]"
+          className="flex items-center gap-[10px] rounded-[10px] px-1 py-1 -mx-1 hover:bg-surface3"
           aria-label="Menú de usuario"
         >
           {usuario.avatar ? (
@@ -175,7 +177,7 @@ export default function Topbar({ onQuickAction }) {
           )}
           <div className="text-left">
             <div className="text-[12.5px] font-bold leading-tight">{usuario.nombre}</div>
-            <div className="text-[11px] text-[#8b8880] font-semibold">{rol}</div>
+            <div className="text-[11px] text-muted3 font-semibold">{rol}</div>
           </div>
           <Icon name="expand_more" size={18} className="text-muted2" />
         </button>
@@ -183,7 +185,7 @@ export default function Topbar({ onQuickAction }) {
           <div className="absolute right-0 top-[52px] w-[250px] card shadow-xl overflow-hidden animate-pop z-50">
             <div className="px-[13px] py-[12px] border-b border-line2">
               <div className="text-[12.5px] font-bold leading-tight">{usuario.nombre}</div>
-              <div className="text-[11px] text-[#8b8880] font-semibold mb-[5px]">{rol}</div>
+              <div className="text-[11px] text-muted3 font-semibold mb-[5px]">{rol}</div>
               <div className="font-mono text-[11px] text-muted2 break-all">{email}</div>
             </div>
             <div className="p-[6px]">
@@ -202,7 +204,7 @@ export default function Topbar({ onQuickAction }) {
         )}
       </div>
 
-      <span className="hidden 2xl:block font-mono text-xs text-[#8b8880] whitespace-nowrap">{HOY.largo}</span>
+      <span className="hidden 2xl:block font-mono text-xs text-muted3 whitespace-nowrap">{HOY.largo}</span>
       <span className="sr-only">{empresa.name}</span>
     </header>
   );

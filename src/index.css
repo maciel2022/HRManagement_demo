@@ -3,13 +3,124 @@
 @tailwind utilities;
 
 @layer base {
-  /* Valores por defecto; ConfigProvider los sobreescribe según el perfil de demo */
+  /* ==========================================================================
+     PALETA DE TEMAS
+     Único origen de verdad del color. tailwind.config.js sólo apunta a estas
+     variables; ningún componente define un color propio.
+
+     ConfigProvider escribe las ENTRADAS crudas de marca (--brand-base y
+     compañía) como style en línea sobre <html>. Los tokens consumidos se
+     derivan acá: un style en línea gana a cualquier regla de hoja de estilos,
+     así que si el proveedor escribiera --brand directamente el tema oscuro
+     nunca podría sobreescribirlo.
+     ========================================================================== */
+
+  /* ---------- Tema claro (predeterminado) ---------- */
   :root {
-    --brand: #12665c;
-    --brand-dark: #0d4a43;
-    --brand-soft: #e6f0ee;
-    --secondary: #9a6a10;
+    --canvas: #f6f5f2;
+    --surface: #ffffff;
+    --surface-2: #faf9f7;
+    --surface-3: #f2f0ec;
+    --surface-sunken: #efeee9; /* fondo hundido de las tiras de pestañas */
+    --surface-translucent: rgba(255, 255, 255, 0.92);
+
+    --line: #e6e3dd;
+    --line-2: #f0eeea;
+    --line-strong: #e2ded6;
+    --line-dashed: #cfcac1; /* bordes punteados y separadores de baja jerarquía */
+    --bad-line: #f0d4d4; /* borde de acción destructiva, más marcado que --bad-bg */
+
+    --ink: #262521;
+    --ink-2: #55534c;
+    --ink-3: #4a4842; /* navegación inactiva: más oscuro que --ink-2 */
+    /* Deuda conocida y aceptada: estos tres grises no llegan a 4.5:1.
+       Oscurecerlos colapsaría los tres niveles de jerarquía en uno solo.
+       Ver docs/superpowers/plans/2026-09-04-tema-claro-oscuro.md */
+    --muted: #7c7a72;
+    --muted-2: #a5a29a;
+    --muted-3: #8b8880;
+
+    --ok-fg: #1f7a4d;
+    --ok-bg: #e7f3ec;
+    --warn-fg: #93650f; /* era #9a6a10 (4.22:1); corregido para cumplir AA */
+    --warn-bg: #fbf1de;
+    --bad-fg: #a83232;
+    --bad-bg: #fbeaea;
+    --info-fg: #2f5fa8;
+    --info-bg: #e9eff9;
+    --vio-fg: #6b4a9e;
+    --vio-bg: #f0eaf9;
+    --grey-fg: #6b6a63;
+    --grey-bg: #eeece7;
+
+    --brand: var(--brand-base, #12665c);
+    --brand-dark: var(--brand-base-dark, #0d4a43);
+    --brand-soft: var(--brand-soft-base, #e6f0ee);
+    --brand-ink: #ffffff;
+    --secondary: var(--secondary-base, #93650f);
+
+    --overlay: rgba(38, 37, 33, 0.42);
+    --toast-bg: var(--ink);
+    --toast-ink: var(--canvas);
+    --toast-accent: #7fd1b9;
+    --scrollbar: #dcd8d0;
+
+    color-scheme: light;
   }
+
+  /* ---------- Tema oscuro ---------- */
+  /* La especificidad importa: :root[data-theme='dark'] (0,2,0) gana sobre
+     :root (0,1,0). Un [data-theme='dark'] a secas empataría y no aplicaría. */
+  :root[data-theme='dark'] {
+    --canvas: #171614;
+    --surface: #1e1d1a;
+    --surface-2: #232220;
+    --surface-3: #2b2a26;
+    --surface-sunken: #191816; /* hundido = más oscuro que la superficie */
+    --surface-translucent: rgba(30, 29, 26, 0.92);
+
+    --line: #35322c;
+    --line-2: #2a2824;
+    --line-strong: #403c35;
+    --line-dashed: #4a453d;
+    --bad-line: #4d2626;
+
+    --ink: #ece9e3;
+    --ink-2: #c3bfb7;
+    --ink-3: #d8d4cd; /* invertido: más claro que --ink-2 */
+    /* En oscuro la jerarquía se invierte: más claro = más énfasis. Se conserva el
+       mismo orden de tres niveles que en claro (muted > muted-3 > muted-2), pero
+       acá los tres sí cumplen AA. */
+    --muted: #a49f96;
+    --muted-2: #918c83;
+    --muted-3: #9a958c;
+
+    --ok-fg: #5fc98f;
+    --ok-bg: #14312a;
+    --warn-fg: #e0b452;
+    --warn-bg: #33280f;
+    --bad-fg: #f08a86;
+    --bad-bg: #3a1c1c;
+    --info-fg: #7fb0ee;
+    --info-bg: #16263f;
+    --vio-fg: #b79ae8;
+    --vio-bg: #241c3a;
+    --grey-fg: #b0aaa0;
+    --grey-bg: #2c2a26;
+
+    --brand: color-mix(in srgb, var(--brand-base, #12665c) 45%, white);
+    --brand-dark: color-mix(in srgb, var(--brand-base, #12665c) 32%, white);
+    --brand-soft: color-mix(in srgb, var(--brand-base, #12665c) 20%, var(--surface));
+    --brand-ink: #10120f;
+    --secondary: color-mix(in srgb, var(--secondary-base, #93650f) 45%, white);
+
+    --overlay: rgba(10, 9, 8, 0.62);
+    --toast-accent: #2f7d64;
+    --scrollbar: #3a3831;
+
+    color-scheme: dark;
+  }
+
   html,
   body,
   #root {
@@ -29,9 +140,9 @@
     height: 10px;
   }
   ::-webkit-scrollbar-thumb {
-    background: #dcd8d0;
+    background: var(--scrollbar);
     border-radius: 8px;
-    border: 3px solid #f6f5f2;
+    border: 3px solid var(--canvas);
   }
 }
 
@@ -48,13 +159,13 @@
     @apply bg-surface border border-line rounded-[13px];
   }
   .th {
-    @apply text-left px-3 py-[11px] text-[10.5px] uppercase tracking-[.06em] text-[#8b8880] font-bold whitespace-nowrap;
+    @apply text-left px-3 py-[11px] text-[10.5px] uppercase tracking-[.06em] text-muted3 font-bold whitespace-nowrap;
   }
   .td {
     @apply px-3 py-[10px] align-middle;
   }
   .input {
-    @apply w-full px-[11px] py-[9px] border border-[#e2ded6] rounded-[9px] bg-[#faf9f7] text-[13px] outline-none focus:border-brand;
+    @apply w-full px-[11px] py-[9px] border border-linestrong rounded-[9px] bg-surface2 text-ink text-[13px] outline-none focus:border-brand;
   }
   .label {
     @apply block text-[11px] font-bold text-muted mb-[5px];
@@ -63,10 +174,10 @@
     @apply inline-flex items-center gap-[6px] px-[13px] py-2 rounded-[9px] text-[12.5px] font-bold cursor-pointer border;
   }
   .btn-primary {
-    @apply btn bg-brand text-white border-transparent hover:bg-brand-dark;
+    @apply btn bg-brand text-brandink border-transparent hover:bg-brand-dark;
   }
   .btn-ghost {
-    @apply btn bg-surface text-ink2 border-[#e2ded6] hover:bg-[#f2f0ec];
+    @apply btn bg-surface text-ink2 border-linestrong hover:bg-surface3;
   }
   .chip {
     @apply inline-block text-[11px] font-bold px-[9px] py-[3px] rounded-full whitespace-nowrap;

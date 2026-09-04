@@ -40,15 +40,15 @@ export default function Documentacion() {
             key={f}
             onClick={() => setFiltro(f)}
             className={
-              'px-[13px] py-[7px] border border-[#e2ded6] rounded-full text-xs font-bold ' +
-              (filtro === f ? 'bg-brand text-white' : 'bg-surface text-ink2 hover:bg-[#f2f0ec]')
+              'px-[13px] py-[7px] border border-linestrong rounded-full text-xs font-bold ' +
+              (filtro === f ? 'bg-brand text-brandink' : 'bg-surface text-ink2 hover:bg-surface3')
             }
           >
             {f}
           </button>
         ))}
         <div className="flex-1" />
-        <span className="font-mono text-xs text-[#8b8880]">{rows.length} documentos</span>
+        <span className="font-mono text-xs text-muted3">{rows.length} documentos</span>
         {can('documents', 'create') && (
           <button className="btn-primary" onClick={() => setCargar(true)}>
             <Icon name="upload_file" size={17} /> Cargar documento

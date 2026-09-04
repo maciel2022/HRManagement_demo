@@ -55,8 +55,8 @@ export default function Desempeno() {
               key={emp.id}
               onClick={() => setSelId(emp.id)}
               className={
-                'px-5 py-3 border-t border-canvas flex items-center gap-3 cursor-pointer hover:bg-[#faf9f7] ' +
-                (sel.emp.id === emp.id ? 'bg-[#faf9f7]' : '')
+                'px-5 py-3 border-t border-canvas flex items-center gap-3 cursor-pointer hover:bg-surface2 ' +
+                (sel.emp.id === emp.id ? 'bg-surface2' : '')
               }
             >
               <Avatar emp={emp} />
@@ -120,7 +120,7 @@ export default function Desempeno() {
                   <span>{o.n}</span>
                   <span className="font-mono text-muted">{o.prog}%</span>
                 </div>
-                <ProgressBar pct={o.prog} color="#2f5fa8" height={7} />
+                <ProgressBar pct={o.prog} color="var(--info-fg)" height={7} />
               </div>
             ))}
           </Card>
