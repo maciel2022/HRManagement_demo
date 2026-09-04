@@ -12,10 +12,13 @@
 
 ## Global Constraints
 
-- **The light theme must not change.** Every light token value in this plan is the exact hex already in the codebase. Light-theme screenshots must match the Task 0 baseline.
+- **The light theme must not change**, with one approved exception (below). Every other light token value in this plan is the exact hex already in the codebase.
+- **APPROVED EXCEPTION — tono `warn` (decisión del 2026-09-04):** `#9a6a10` sobre `#fbf1de` da 4.22:1 y no cumple AA. Se corrige a **`#93650f`** (4.56:1), imperceptible a simple vista. Hay que cambiarlo en **dos** lugares: el token `--warn-fg` en `index.css` y la entrada `'#fbf1de': '#9a6a10'` del mapa `HUE_FG` en `data/generador.js` — es el mismo par de color en los avatares.
+- **Deuda conocida y aceptada del tema claro:** `muted` (#7c7a72, 4.30:1), `muted3` (#8b8880, 3.54:1) y `muted2` (#a5a29a, 2.55:1) no cumplen AA. **No se tocan**: llevarlos a 4.5:1 exige oscurecerlos a ~#6f6d66 y colapsaría los tres niveles de jerarquía gris en uno solo, que es un rediseño. La auditoría los tolera mediante una lista explícita (`DEUDA_CLARO`) y falla ante cualquier *otro* fallo en claro.
+- **La auditoría exige AA completo en el tema OSCURO.** Cero tolerancia ahí: la paleta oscura se diseña desde cero y no tiene por qué heredar deuda.
 - **No behavior changes.** No component's props, state, event handlers, or rendered structure change except where this plan says so explicitly.
 - **`src/config/demo.config.js` is not modified.** Client profiles must learn nothing about themes.
-- **`src/data/generador.js` is not modified.** Its 21 hex are avatar identity data (`HUES` + `HUE_FG`), each light tint paired with its own dark foreground, legible in both themes.
+- **`src/data/generador.js` is not tokenized** (una sola excepción: el valor `warn` de arriba). Its 21 hex are avatar identity data (`HUES` + `HUE_FG`), each light tint paired with its own dark foreground, legible in both themes.
 - **No hardcoded color may remain** in `src/**/*.jsx` outside those two files. The exit check is a grep that must return empty.
 - **Contrast floor:** WCAG AA — 4.5:1 for normal text, 3:1 for text ≥18.66px bold or ≥24px.
 - **Storage keys already in use — do not collide:** `rrhh-demo-profile`, `rrhh-demo-auth`. The new one is `rrhh-demo-theme`.
