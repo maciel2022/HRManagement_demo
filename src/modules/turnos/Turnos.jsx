@@ -26,12 +26,9 @@ const tonoTurno = (t, defs) => {
 
 export default function Turnos() {
   const { sucursal, rol, ctx, toastMsg, filtros, setFiltros, resetFiltros } = useSession();
-  // La cobertura por sucursal es la vista natural del módulo: los turnos se
-  // dotan por unidad operativa, no sobre la red entera.
-  const [vista, setVista] = useState('sucursal');
+  const [vista, setVista] = useState('semana');
   const [emps, setEmps] = useState([]);
   const [cobertura, setCobertura] = useState([]);
-  const [conteos, setConteos] = useState(null);
   const [asignar, setAsignar] = useState(null);
   const db = getDb();
   const defs = turnosApi.definiciones();
@@ -45,13 +42,11 @@ export default function Turnos() {
 
   const consulta = { sucursal, rol, area: filtros.area, puesto: filtros.puesto, turno: filtros.turno };
 
+  // Las tres vistas comparten los mismos filtros: si la grilla los ignorara,
+  // en la vista inicial los controles parecerían no hacer nada.
   useEffect(() => {
-    turnosApi.semana({ sucursal, rol }).then((r) => setEmps(r.slice(0, 16)));
-  }, [sucursal, rol]);
-
-  useEffect(() => {
+    turnosApi.semana(consulta).then((r) => setEmps(r.slice(0, 16)));
     turnosApi.cobertura(consulta).then(setCobertura);
-    turnosApi.conteos(consulta).then(setConteos);
   }, [sucursal, rol, filtros.area, filtros.puesto, filtros.turno]);
 
   const areasOpt = ['Todas', ...catalogoApi.areasOperativas()];
@@ -135,30 +130,6 @@ export default function Turnos() {
         <Select value={filtros.puesto} onChange={(v) => setFiltros({ puesto: v })} options={puestosOpt} prefix="Puesto" />
         <Select value={filtros.turno} onChange={(v) => setFiltros({ turno: v })} options={turnosOpt} prefix="Turno" />
       </FilterBar>
-
-      {conteos && (
-        <div data-test="contadores" className="flex items-stretch gap-[10px] flex-wrap">
-          <div className="card px-[15px] py-[11px] flex flex-col justify-center min-w-[122px]">
-            <span className="text-[10.5px] uppercase tracking-[.06em] text-muted3 font-bold">Personal</span>
-            <span className="text-[19px] font-extrabold leading-tight">{conteos.total}</span>
-          </div>
-          {conteos.items.map((c) => (
-            <div
-              key={c.label}
-              data-test="contador"
-              className="card px-[15px] py-[11px] flex flex-col justify-center min-w-[122px]"
-            >
-              <span className="text-[11px] text-muted font-semibold truncate">{c.label}</span>
-              <span className="text-[17px] font-extrabold leading-tight">{c.total}</span>
-            </div>
-          ))}
-          {!conteos.items.length && (
-            <div className="card px-[15px] py-[11px] text-xs text-muted">
-              Ningún empleado coincide con los filtros.
-            </div>
-          )}
-        </div>
-      )}
 
       <div className="flex items-center gap-[10px] flex-wrap">
         <Tabs tabs={VISTAS} value={vista} onChange={setVista} />
