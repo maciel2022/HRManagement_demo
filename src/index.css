@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Valores por defecto; ConfigProvider los sobreescribe según el perfil de demo */
+  :root {
+    --brand: #12665c;
+    --brand-dark: #0d4a43;
+    --brand-soft: #e6f0ee;
+    --secondary: #9a6a10;
+  }
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-canvas text-ink font-sans antialiased;
+  }
+  a {
+    @apply text-brand no-underline;
+  }
+  a:hover {
+    @apply text-brand-dark;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #dcd8d0;
+    border-radius: 8px;
+    border: 3px solid #f6f5f2;
+  }
+}
+
+@layer components {
+  /* Icono de Material Symbols reutilizable */
+  .ms {
+    font-family: 'Material Symbols Rounded';
+    font-weight: 400;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+  .card {
+    @apply bg-surface border border-line rounded-[13px];
+  }
+  .th {
+    @apply text-left px-3 py-[11px] text-[10.5px] uppercase tracking-[.06em] text-[#8b8880] font-bold whitespace-nowrap;
+  }
+  .td {
+    @apply px-3 py-[10px] align-middle;
+  }
+  .input {
+    @apply w-full px-[11px] py-[9px] border border-[#e2ded6] rounded-[9px] bg-[#faf9f7] text-[13px] outline-none focus:border-brand;
+  }
+  .label {
+    @apply block text-[11px] font-bold text-muted mb-[5px];
+  }
+  .btn {
+    @apply inline-flex items-center gap-[6px] px-[13px] py-2 rounded-[9px] text-[12.5px] font-bold cursor-pointer border;
+  }
+  .btn-primary {
+    @apply btn bg-brand text-white border-transparent hover:bg-brand-dark;
+  }
+  .btn-ghost {
+    @apply btn bg-surface text-ink2 border-[#e2ded6] hover:bg-[#f2f0ec];
+  }
+  .chip {
+    @apply inline-block text-[11px] font-bold px-[9px] py-[3px] rounded-full whitespace-nowrap;
+  }
+}
