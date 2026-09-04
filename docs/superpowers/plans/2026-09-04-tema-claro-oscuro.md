@@ -1187,3 +1187,77 @@ pkill -f "remote-debugging-port=9222"; pkill -f "vite --no-open --port 5199"
 - **When a contrast failure has two fixes** — change the token or change the component — change the token. The whole point is one source of truth.
 - **`color-mix()` fallback:** if the derived brand renders wrong, check browser support before rewriting the approach. Chrome/Edge 111+, Safari 16.2+, Firefox 113+.
 - **The audit cannot see closed overlays.** Modals, dropdowns and the notification panel must be opened explicitly (Tasks 9 Step 4). A green audit with every overlay closed proves nothing about them.
+
+---
+
+## Resultado de la Tarea 11 (verificación)
+
+Todo verde. Lo que sigue son los hallazgos que la verificación destapó y que
+valen más que el resultado.
+
+### La auditoría de contraste no alcanza para probar fidelidad
+
+Mide legibilidad, no parecido. Con las 26 auditorías en verde, el tema claro
+igual se había movido en **cuatro** lugares: el barrido mapeó literales a tokens
+de valor cercano pero distinto.
+
+| Elemento | Original | Tras el barrido |
+|---|---|---|
+| Rótulo inactivo de la barra lateral | `#4a4842` | `#55534c` (`--ink-2`) |
+| Fondo de las tiras de pestañas | `#efeee9` | `#f2f0ec` (`--surface-3`) |
+| Borde de acción destructiva | `#f0d4d4` | `#fbeaea` (`--bad-bg`) |
+| Bordes punteados y chevron | `#cfcac1` | `#e2ded6` (`--line-strong`) |
+
+Se corrigieron agregando cuatro tokens con el valor claro exacto del original y
+su contraparte oscura: `--ink-3`, `--surface-sunken`, `--bad-line`,
+`--line-dashed`. Lo que lo detectó fue la comparación píxel a píxel contra el
+commit previo (`6b53ff4`) servido en paralelo, no la auditoría.
+
+### El arnés falló en verde tres veces
+
+Cada una habría dado por buena una verificación vacía:
+
+1. **Extracción vacía.** Los scripts de capas levantan la función de contraste
+   del archivo de auditoría por índice de texto. El marcador no coincidía, la
+   extracción dio cadena vacía, `try { return ; }` devolvió `undefined` y
+   `fallos && fallos.length` lo leyó como "sin fallos". 13 capas dieron OK sin
+   medir nada. Hoy la extracción se valida al cargar.
+2. **Capa equivocada.** Los desplegables del encabezado no cierran con clic
+   afuera, así que el menú de usuario quedaba abierto y `querySelector` lo
+   devolvía antes que el modal. Todos los modales se midieron como si fueran ese
+   menú. Hoy cada clase de capa tiene su selector y su cierre, y se exige que no
+   queden capas abiertas entre mediciones.
+3. **Aserciones obsoletas.** La prueba de ingreso comparaba `--brand` contra
+   hexes fijos; ese token ahora se deriva. Apunta a `--brand-base`, la entrada
+   cruda.
+
+**Regla:** una auditoría que sólo puede dar OK no es una auditoría. Antes de
+confiar en un verde, hay que verla ponerse roja — acá se hizo corriendo la
+auditoría de capas en tema claro, donde los grises de deuda conocida aparecen.
+
+### Fallo real encontrado y corregido
+
+Numeral de paso pendiente del asistente Hikvision: `--muted-2` sobre
+`--surface-3` daba 4.3:1 en oscuro. Ese chip es más claro que la superficie del
+modal, así que el token que alcanzaba en el resto del modal no alcanzaba ahí.
+Pasó a `--muted` (5.45:1); la etiqueta conserva `--muted-2`, que sobre la
+superficie del modal da 5.04:1, así que la jerarquía se mantiene.
+
+### Límite previo, no regresión
+
+El armazón del tablero desborda 491px a 390px de ancho. Es idéntico en claro y
+en oscuro, y en los componentes de disposición esta rama cambió sólo clases de
+color. Es de escritorio desde antes de este trabajo; corregirlo sería un
+rediseño, explícitamente fuera de alcance. La comprobación móvil verifica
+**paridad entre temas**, no desborde cero.
+
+### Cobertura final
+
+- Contraste: 26/26 módulos × 3 inquilinos, ambos temas — sin fallos.
+- Capas: 19 (4 desplegables, 10 modales, 6 pasos del asistente, recibo,
+  asignación de turno, aviso flotante) en oscuro — sin fallos.
+- Ingreso: 27/27.
+- Persistencia: 10/10, incluida la preferencia del sistema en ambos sentidos.
+- Fidelidad del tema claro: fuera del encabezado, el cuerpo difiere sólo en las
+  insignias y barras de tono `warn` — el único cambio aprobado.
+- Consola: sin errores. `npm run build`: correcto.

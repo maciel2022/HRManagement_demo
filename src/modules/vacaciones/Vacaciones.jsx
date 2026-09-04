@@ -104,7 +104,7 @@ export default function Vacaciones({ accion, onAccionConsumida }) {
                   <div className="flex gap-[7px]">
                     <button
                       onClick={() => decidir(r.id, 'Rechazado')}
-                      className="px-3 py-[7px] border border-bad-soft rounded-lg bg-surface text-xs font-bold text-bad hover:bg-bad-soft"
+                      className="px-3 py-[7px] border border-badline rounded-lg bg-surface text-xs font-bold text-bad hover:bg-bad-soft"
                     >
                       Rechazar
                     </button>

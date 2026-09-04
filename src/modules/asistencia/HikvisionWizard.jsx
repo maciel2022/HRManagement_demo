@@ -74,7 +74,9 @@ export default function HikvisionWizard({ onClose, onConfirm }) {
                 className="w-[23px] h-[23px] rounded-full grid place-items-center text-[11px] font-extrabold font-mono"
                 style={{
                   background: activo ? 'var(--brand)' : hecho ? 'var(--brand-soft)' : 'var(--surface-3)',
-                  color: activo ? 'var(--brand-ink)' : hecho ? 'var(--brand)' : 'var(--muted-2)'
+                  // El numeral pendiente va sobre --surface-3, más claro que la superficie
+                  // del modal: con --muted-2 quedaba en 4.3:1. La etiqueta sí lo conserva.
+                  color: activo ? 'var(--brand-ink)' : hecho ? 'var(--brand)' : 'var(--muted)'
                 }}
               >
                 {n}
@@ -88,7 +90,7 @@ export default function HikvisionWizard({ onClose, onConfirm }) {
       </div>
 
       {paso === 1 && (
-        <div className="border-2 border-dashed border-linestrong rounded-[14px] p-10 text-center bg-surface2">
+        <div className="border-2 border-dashed border-linedashed rounded-[14px] p-10 text-center bg-surface2">
           <Icon name="cloud_upload" size={38} className="text-brand block mb-[10px]" />
           <div className="text-sm font-bold mb-[5px]">Arrastrá el archivo exportado del dispositivo Hikvision</div>
           <div className="text-[12.5px] text-muted mb-4">Formatos aceptados: .csv y .xlsx — hasta 5 MB</div>

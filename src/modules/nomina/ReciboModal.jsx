@@ -61,7 +61,7 @@ export default function ReciboModal({ emp, periodo, onClose, onConfirm }) {
         </tbody>
       </table>
 
-      <div className="flex justify-end gap-6 px-3 pt-[15px] mt-2 border-t-2 border-surface3">
+      <div className="flex justify-end gap-6 px-3 pt-[15px] mt-2 border-t-2 border-sunken">
         {[
           ['Total bruto', ars(d.bruto), ''],
           ['Descuentos', '− ' + ars(d.aportes), 'text-bad'],

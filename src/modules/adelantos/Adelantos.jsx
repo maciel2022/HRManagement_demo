@@ -49,7 +49,7 @@ export default function Adelantos({ accion, onAccionConsumida }) {
               {i + 1}
             </span>
             <span className="text-xs font-bold">{c}</span>
-            <Icon name="chevron_right" size={16} className="text-linestrong" />
+            <Icon name="chevron_right" size={16} className="text-linedashed" />
           </span>
         ))}
         <div className="flex-1" />
@@ -117,7 +117,7 @@ export default function Adelantos({ accion, onAccionConsumida }) {
                   <div className="flex gap-[6px]">
                     <button
                       onClick={() => decidir(a.id, 'Rechazado')}
-                      className="px-[10px] py-[6px] border border-bad-soft rounded-lg bg-surface text-[11.5px] font-bold text-bad hover:bg-bad-soft"
+                      className="px-[10px] py-[6px] border border-badline rounded-lg bg-surface text-[11.5px] font-bold text-bad hover:bg-bad-soft"
                     >
                       Rechazar
                     </button>

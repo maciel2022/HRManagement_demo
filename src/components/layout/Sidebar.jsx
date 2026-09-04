@@ -91,7 +91,7 @@ export default function Sidebar() {
               onClick={() => setRuta(m.id)}
               className={
                 'flex items-center gap-[11px] w-full text-left px-[11px] py-[9px] rounded-[9px] text-[13.5px] font-semibold ' +
-                (on ? 'bg-brand-soft text-brand' : 'text-ink2 hover:bg-surface3')
+                (on ? 'bg-brand-soft text-brand' : 'text-ink3 hover:bg-surface3')
               }
             >
               <Icon name={m.icon} size={20} />

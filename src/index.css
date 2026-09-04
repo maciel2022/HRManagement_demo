@@ -21,14 +21,18 @@
     --surface: #ffffff;
     --surface-2: #faf9f7;
     --surface-3: #f2f0ec;
+    --surface-sunken: #efeee9; /* fondo hundido de las tiras de pestañas */
     --surface-translucent: rgba(255, 255, 255, 0.92);
 
     --line: #e6e3dd;
     --line-2: #f0eeea;
     --line-strong: #e2ded6;
+    --line-dashed: #cfcac1; /* bordes punteados y separadores de baja jerarquía */
+    --bad-line: #f0d4d4; /* borde de acción destructiva, más marcado que --bad-bg */
 
     --ink: #262521;
     --ink-2: #55534c;
+    --ink-3: #4a4842; /* navegación inactiva: más oscuro que --ink-2 */
     /* Deuda conocida y aceptada: estos tres grises no llegan a 4.5:1.
        Oscurecerlos colapsaría los tres niveles de jerarquía en uno solo.
        Ver docs/superpowers/plans/2026-09-04-tema-claro-oscuro.md */
@@ -72,14 +76,18 @@
     --surface: #1e1d1a;
     --surface-2: #232220;
     --surface-3: #2b2a26;
+    --surface-sunken: #191816; /* hundido = más oscuro que la superficie */
     --surface-translucent: rgba(30, 29, 26, 0.92);
 
     --line: #35322c;
     --line-2: #2a2824;
     --line-strong: #403c35;
+    --line-dashed: #4a453d;
+    --bad-line: #4d2626;
 
     --ink: #ece9e3;
     --ink-2: #c3bfb7;
+    --ink-3: #d8d4cd; /* invertido: más claro que --ink-2 */
     /* En oscuro la jerarquía se invierte: más claro = más énfasis. Se conserva el
        mismo orden de tres niveles que en claro (muted > muted-3 > muted-2), pero
        acá los tres sí cumplen AA. */

@@ -3,7 +3,7 @@ import { TONOS } from '@/lib/format';
 
 export function Tabs({ tabs, value, onChange }) {
   return (
-    <div className="flex gap-1 p-[5px] bg-surface3 rounded-[11px] overflow-x-auto flex-wrap">
+    <div className="flex gap-1 p-[5px] bg-sunken rounded-[11px] overflow-x-auto flex-wrap">
       {tabs.map((t) => {
         const on = value === t.id;
         return (

@@ -106,7 +106,7 @@ export function ColumnChart({ title, subtitle, items, color = 'var(--ok-fg)' }) 
 
 export function EmptyState({ icon = 'inbox', title, body, tone = 'var(--muted-2)' }) {
   return (
-    <div className="bg-surface border border-dashed border-linestrong rounded-[14px] p-11 text-center">
+    <div className="bg-surface border border-dashed border-linedashed rounded-[14px] p-11 text-center">
       <Icon name={icon} size={34} className="block mb-[10px]" style={{ color: tone }} />
       <div className="text-sm font-bold">{title}</div>
       {body && <div className="text-[12.5px] text-muted mt-1">{body}</div>}
