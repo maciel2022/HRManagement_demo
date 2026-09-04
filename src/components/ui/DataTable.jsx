@@ -4,7 +4,7 @@ export function DataTable({ columns, rows, rowKey, onRowClick, minWidth }) {
     <div className="overflow-x-auto">
       <table className="w-full border-collapse text-[12.5px]" style={minWidth ? { minWidth } : undefined}>
         <thead>
-          <tr className="bg-[#faf9f7]">
+          <tr className="bg-surface2">
             {columns.map((c, i) => (
               <th
                 key={c.key ?? i}
@@ -21,7 +21,7 @@ export function DataTable({ columns, rows, rowKey, onRowClick, minWidth }) {
             <tr
               key={rowKey ? rowKey(row, ri) : ri}
               onClick={onRowClick ? () => onRowClick(row) : undefined}
-              className={'border-t border-[#f6f5f2] ' + (onRowClick ? 'cursor-pointer hover:bg-[#faf9f7]' : '')}
+              className={'border-t border-canvas ' + (onRowClick ? 'cursor-pointer hover:bg-surface2' : '')}
             >
               {columns.map((c, ci) => (
                 <td

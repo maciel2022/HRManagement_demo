@@ -73,13 +73,13 @@ export default function HikvisionWizard({ onClose, onConfirm }) {
               <span
                 className="w-[23px] h-[23px] rounded-full grid place-items-center text-[11px] font-extrabold font-mono"
                 style={{
-                  background: activo ? '#12665c' : hecho ? '#e6f0ee' : '#f2f0ec',
-                  color: activo ? '#fff' : hecho ? '#12665c' : '#a5a29a'
+                  background: activo ? 'var(--brand)' : hecho ? 'var(--brand-soft)' : 'var(--surface-3)',
+                  color: activo ? 'var(--brand-ink)' : hecho ? 'var(--brand)' : 'var(--muted-2)'
                 }}
               >
                 {n}
               </span>
-              <span className="text-[11.5px] font-bold" style={{ color: paso >= n ? '#262521' : '#a5a29a' }}>
+              <span className="text-[11.5px] font-bold" style={{ color: paso >= n ? 'var(--ink)' : 'var(--muted-2)' }}>
                 {l}
               </span>
             </div>
@@ -88,14 +88,14 @@ export default function HikvisionWizard({ onClose, onConfirm }) {
       </div>
 
       {paso === 1 && (
-        <div className="border-2 border-dashed border-[#cfcac1] rounded-[14px] p-10 text-center bg-[#faf9f7]">
+        <div className="border-2 border-dashed border-linestrong rounded-[14px] p-10 text-center bg-surface2">
           <Icon name="cloud_upload" size={38} className="text-brand block mb-[10px]" />
           <div className="text-sm font-bold mb-[5px]">Arrastrá el archivo exportado del dispositivo Hikvision</div>
           <div className="text-[12.5px] text-muted mb-4">Formatos aceptados: .csv y .xlsx — hasta 5 MB</div>
-          <div className="inline-flex items-center gap-[9px] px-[14px] py-[10px] bg-surface border border-[#e2ded6] rounded-[10px] text-[12.5px] font-bold">
+          <div className="inline-flex items-center gap-[9px] px-[14px] py-[10px] bg-surface border border-linestrong rounded-[10px] text-[12.5px] font-bold">
             <Icon name="description" size={19} className="text-ok" />
             AccessControl_0109-0209.csv
-            <span className="font-mono text-[#8b8880] font-medium">248 filas · 61 KB</span>
+            <span className="font-mono text-muted3 font-medium">248 filas · 61 KB</span>
           </div>
         </div>
       )}
@@ -104,7 +104,7 @@ export default function HikvisionWizard({ onClose, onConfirm }) {
         <div className="border border-line rounded-xl overflow-hidden overflow-x-auto">
           <table className="w-full border-collapse text-xs">
             <thead>
-              <tr className="bg-[#faf9f7]">
+              <tr className="bg-surface2">
                 {['Employee ID', 'Employee name', 'Date', 'Check-in', 'Check-out', 'Device', 'Access point'].map((h) => (
                   <th key={h} className="th">{h}</th>
                 ))}
@@ -156,7 +156,7 @@ export default function HikvisionWizard({ onClose, onConfirm }) {
 
       {paso === 5 && (
         <div className="border border-line rounded-xl overflow-hidden">
-          <div className="px-[15px] py-3 bg-[#faf9f7] border-b border-line2 text-[12.5px] font-bold">
+          <div className="px-[15px] py-3 bg-surface2 border-b border-line2 text-[12.5px] font-bold">
             Cálculos automáticos y advertencias por registro
           </div>
           <table className="w-full border-collapse text-xs">
@@ -185,7 +185,7 @@ export default function HikvisionWizard({ onClose, onConfirm }) {
       {paso === 6 && (
         <div className="grid grid-cols-2 gap-3">
           {RESUMEN.map(([k, v]) => (
-            <div key={k} className="flex items-center justify-between gap-[10px] px-[14px] py-3 bg-[#faf9f7] border border-line2 rounded-[11px]">
+            <div key={k} className="flex items-center justify-between gap-[10px] px-[14px] py-3 bg-surface2 border border-line2 rounded-[11px]">
               <span className="text-[12.5px] font-semibold text-ink2">{k}</span>
               <span className="font-mono text-sm font-extrabold">{v}</span>
             </div>

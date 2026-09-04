@@ -4,7 +4,7 @@ export function Modal({ icon = 'edit', title, subtitle, width = 560, onClose, ch
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-[150] bg-[rgba(38,37,33,.42)] backdrop-blur-[3px] flex items-start justify-center px-5 py-12 overflow-y-auto"
+      className="fixed inset-0 z-[150] bg-overlay backdrop-blur-[3px] flex items-start justify-center px-5 py-12 overflow-y-auto"
     >
       <div
         onClick={(e) => e.stopPropagation()}
@@ -17,7 +17,7 @@ export function Modal({ icon = 'edit', title, subtitle, width = 560, onClose, ch
             <div className="text-base font-bold tracking-[-.2px]">{title}</div>
             {subtitle && <div className="text-xs text-muted mt-[2px]">{subtitle}</div>}
           </div>
-          <button onClick={onClose} className="w-8 h-8 rounded-lg bg-[#f2f0ec] hover:bg-line grid place-items-center" aria-label="Cerrar">
+          <button onClick={onClose} className="w-8 h-8 rounded-lg bg-surface3 hover:bg-line grid place-items-center" aria-label="Cerrar">
             <Icon name="close" size={19} className="text-ink2" />
           </button>
         </div>
@@ -69,7 +69,7 @@ export function FormFields({ fields }) {
             <textarea rows={f.rows ?? 3} className="input resize-y" placeholder={f.placeholder} />
           ) : (
             <input
-              className={'input ' + (f.dashed ? 'border-dashed ' : '') + (f.readOnly ? 'bg-[#f2f0ec] font-mono ' : '')}
+              className={'input ' + (f.dashed ? 'border-dashed ' : '') + (f.readOnly ? 'bg-surface3 font-mono ' : '')}
               placeholder={f.placeholder}
               defaultValue={f.value}
               readOnly={f.readOnly}

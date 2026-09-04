@@ -161,7 +161,7 @@ export default function Asistencia({ accion, onAccionConsumida }) {
               <select
                 value={emp.legajo}
                 onChange={(e) => setLegajo(e.target.value)}
-                className="px-[10px] py-2 border border-[#e2ded6] rounded-[9px] bg-[#faf9f7] text-[12.5px] font-semibold cursor-pointer max-w-[300px]"
+                className="px-[10px] py-2 border border-linestrong rounded-[9px] bg-surface2 text-[12.5px] font-semibold cursor-pointer max-w-[300px]"
               >
                 {rows.map((e) => (
                   <option key={e.id} value={e.legajo}>
@@ -182,7 +182,7 @@ export default function Asistencia({ accion, onAccionConsumida }) {
                   <div
                     key={i}
                     className="min-h-[64px] rounded-[10px] p-2"
-                    style={{ background: t.bg, border: '1.5px solid ' + (c.hoy ? '#12665c' : 'transparent') }}
+                    style={{ background: t.bg, border: '1.5px solid ' + (c.hoy ? 'var(--brand)' : 'transparent') }}
                   >
                     <div className="font-mono text-xs font-bold mb-1" style={{ color: t.fg }}>
                       {c.dia}
@@ -232,7 +232,7 @@ export default function Asistencia({ accion, onAccionConsumida }) {
                   <Chip tone={TONOS[i.tone]}>{i.tipo}</Chip>
                   <div className="text-xs text-muted mt-[5px]">{i.det}</div>
                 </div>
-                <div className="font-mono text-[11.5px] text-[#8b8880] min-w-[150px]">
+                <div className="font-mono text-[11.5px] text-muted3 min-w-[150px]">
                   {i.disp}
                   <br />
                   {i.punto}
@@ -265,7 +265,7 @@ export default function Asistencia({ accion, onAccionConsumida }) {
         ) : (
           <EmptyState
             icon="task_alt"
-            tone="#1f7a4d"
+            tone="var(--ok-fg)"
             title="No hay incidencias pendientes"
             body="Todas las fichadas del período fueron revisadas."
           />

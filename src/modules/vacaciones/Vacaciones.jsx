@@ -104,7 +104,7 @@ export default function Vacaciones({ accion, onAccionConsumida }) {
                   <div className="flex gap-[7px]">
                     <button
                       onClick={() => decidir(r.id, 'Rechazado')}
-                      className="px-3 py-[7px] border border-[#f0d4d4] rounded-lg bg-surface text-xs font-bold text-bad hover:bg-bad-soft"
+                      className="px-3 py-[7px] border border-bad-soft rounded-lg bg-surface text-xs font-bold text-bad hover:bg-bad-soft"
                     >
                       Rechazar
                     </button>
@@ -156,7 +156,7 @@ export default function Vacaciones({ accion, onAccionConsumida }) {
               {
                 header: 'Uso',
                 width: 130,
-                cell: (e) => <ProgressBar pct={Math.round((e.vacUsados / e.vacDisp) * 100)} color="#2f5fa8" height={7} />
+                cell: (e) => <ProgressBar pct={Math.round((e.vacUsados / e.vacDisp) * 100)} color="var(--info-fg)" height={7} />
               },
               { header: 'Próximo período', mono: true, cell: () => '01/01/2027' }
             ]}
@@ -191,7 +191,7 @@ export default function Vacaciones({ accion, onAccionConsumida }) {
                         <span className="block text-xs font-bold">{r.emp.full}</span>
                         <span className="block text-[10.5px] text-muted2">{catalogoApi.corta(r.emp.suc)}</span>
                       </span>
-                      <span className="flex-1 relative h-[26px] bg-[#faf9f7] rounded-[7px]">
+                      <span className="flex-1 relative h-[26px] bg-surface2 rounded-[7px]">
                         <span
                           className="absolute top-[3px] bottom-[3px] rounded-md text-[10px] font-bold grid place-items-center overflow-hidden whitespace-nowrap px-1"
                           style={{

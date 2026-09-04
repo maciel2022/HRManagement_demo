@@ -15,7 +15,7 @@ export default function Capacitaciones() {
     capacitacionesApi.pendientes({ sucursal, rol }).then(setPend);
   }, [sucursal, rol]);
 
-  const color = (pct) => (pct >= 80 ? '#1f7a4d' : pct >= 50 ? '#9a6a10' : '#a83232');
+  const color = (pct) => (pct >= 80 ? 'var(--ok-fg)' : pct >= 50 ? 'var(--warn-fg)' : 'var(--bad-fg)');
 
   return (
     <div className="flex flex-col gap-4">
@@ -44,7 +44,7 @@ export default function Capacitaciones() {
               header: '',
               cell: (c) => (
                 <button
-                  className="px-[11px] py-[6px] border border-[#e2ded6] rounded-lg bg-surface text-xs font-bold text-brand hover:bg-brand-soft whitespace-nowrap"
+                  className="px-[11px] py-[6px] border border-linestrong rounded-lg bg-surface text-xs font-bold text-brand hover:bg-brand-soft whitespace-nowrap"
                   onClick={async () => {
                     await capacitacionesApi.asignar(c.name, ctx);
                     toastMsg('Curso “' + c.name + '” asignado a los empleados pendientes.');
@@ -67,7 +67,7 @@ export default function Capacitaciones() {
               <ProgressBar pct={s.pct} color={color(s.pct)} height={9} />
               <span className="font-mono text-[11.5px] font-bold w-[34px] text-right">{s.pct}%</span>
               <Chip estado={s.pct >= 85 ? 'En regla' : s.pct >= 70 ? 'Atención' : 'Incumplimiento'} />
-              <span className="font-mono text-[11px] text-[#8b8880]">{s.pendientes} pend.</span>
+              <span className="font-mono text-[11px] text-muted3">{s.pendientes} pend.</span>
             </div>
           ))}
         </Card>
@@ -77,7 +77,7 @@ export default function Capacitaciones() {
             <div
               key={e.id}
               onClick={() => setRuta('empleados')}
-              className="px-5 py-[11px] border-t border-canvas flex items-center gap-[11px] cursor-pointer hover:bg-[#faf9f7]"
+              className="px-5 py-[11px] border-t border-canvas flex items-center gap-[11px] cursor-pointer hover:bg-surface2"
             >
               <Avatar emp={e} size={30} />
               <span className="flex-1">

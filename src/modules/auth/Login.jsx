@@ -155,7 +155,7 @@ export default function Login() {
                   type="button"
                   onClick={() => setVerPass((v) => !v)}
                   aria-label={verPass ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-                  className="absolute right-[9px] top-1/2 -translate-y-1/2 w-[26px] h-[26px] grid place-items-center rounded-md text-muted2 hover:text-ink2 hover:bg-[#f2f0ec]"
+                  className="absolute right-[9px] top-1/2 -translate-y-1/2 w-[26px] h-[26px] grid place-items-center rounded-md text-muted2 hover:text-ink2 hover:bg-surface3"
                 >
                   <Icon name={verPass ? 'visibility_off' : 'visibility'} size={18} />
                 </button>
@@ -168,7 +168,7 @@ export default function Login() {
                   type="checkbox"
                   checked={recordarme}
                   onChange={(e) => setRecordarme(e.target.checked)}
-                  className="w-[15px] h-[15px] rounded border-[#d8d4cc] accent-[var(--brand)] cursor-pointer"
+                  className="w-[15px] h-[15px] rounded border-linestrong accent-[var(--brand)] cursor-pointer"
                 />
                 Recordarme
               </label>
@@ -252,7 +252,7 @@ export default function Login() {
                       aria-pressed={activo}
                       className={
                         'flex items-center gap-[7px] px-[11px] py-[7px] rounded-full border text-[12px] font-bold transition-colors ' +
-                        (activo ? 'bg-surface border-brand text-brand' : 'bg-transparent border-[#e2ded6] text-muted hover:bg-surface')
+                        (activo ? 'bg-surface border-brand text-brand' : 'bg-transparent border-linestrong text-muted hover:bg-surface')
                       }
                     >
                       <span className="w-[9px] h-[9px] rounded-full shrink-0" style={{ background: p.color }} />

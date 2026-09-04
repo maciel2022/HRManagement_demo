@@ -87,7 +87,7 @@ export default function Turnos() {
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-xs min-w-[900px]">
               <thead>
-                <tr className="bg-[#faf9f7]">
+                <tr className="bg-surface2">
                   <th className="th pl-5">Empleado</th>
                   {DIAS.map(([d, f]) => (
                     <th key={f} className="th text-center">
@@ -137,7 +137,7 @@ export default function Turnos() {
       {vista === 'mes' && (
         <Card className="p-[22px] overflow-x-auto">
           <div className="text-[13.5px] font-bold mb-1">Cobertura diaria — Septiembre 2026</div>
-          <div className="text-xs text-[#8b8880] mb-4">Cada celda indica el nivel de cobertura de la unidad en el día</div>
+          <div className="text-xs text-muted3 mb-4">Cada celda indica el nivel de cobertura de la unidad en el día</div>
           {db.branches.map((b) => (
             <div key={b.id} className="flex items-center gap-[10px] mb-2 min-w-[860px]">
               <span className="w-[130px] shrink-0 text-xs font-bold">{catalogoApi.corta(b.name)}</span>
@@ -172,7 +172,7 @@ export default function Turnos() {
                 <div className="text-xs text-muted mb-[10px]">
                   Turno {c.turno} — {c.asignados} de {c.requeridos} requeridos
                 </div>
-                <ProgressBar pct={Math.min(100, Math.round((c.asignados / c.requeridos) * 100))} color={ok ? '#1f7a4d' : '#a83232'} />
+                <ProgressBar pct={Math.min(100, Math.round((c.asignados / c.requeridos) * 100))} color={ok ? 'var(--ok-fg)' : 'var(--bad-fg)'} />
               </Card>
             );
           })}

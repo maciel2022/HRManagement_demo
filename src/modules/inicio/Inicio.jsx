@@ -92,7 +92,7 @@ export default function Inicio() {
         <Select value={filtros.area} onChange={(v) => setFiltros({ area: v })} options={areasOpt} prefix="Área" />
         <Select value={filtros.puesto} onChange={(v) => setFiltros({ puesto: v })} options={puestosOpt} prefix="Puesto" />
         <Select value={filtros.estado} onChange={(v) => setFiltros({ estado: v })} options={['Todos', 'Activo', 'Vacaciones', 'Licencia', 'Baja']} prefix="Estado" />
-        <div className="px-[10px] py-[7px] border border-dashed border-[#e2ded6] rounded-lg text-[12.5px] font-semibold text-muted font-mono">
+        <div className="px-[10px] py-[7px] border border-dashed border-linestrong rounded-lg text-[12.5px] font-semibold text-muted font-mono">
           Fecha: 03/09/2026
         </div>
       </FilterBar>
@@ -120,7 +120,7 @@ export default function Inicio() {
               <div className="text-[13px] font-bold mb-[14px]">Empleados por área</div>
               <BarList
                 labelWidth={108}
-                color="#2f5fa8"
+                color="var(--info-fg)"
                 items={catalogoApi.areasNombres().map((a) => ({ label: a, value: base.filter((e) => e.area === a).length }))}
               />
             </Card>
@@ -128,9 +128,9 @@ export default function Inicio() {
 
           <div className="grid grid-cols-2 gap-4">
             <ColumnChart title="Presentismo semanal" subtitle="% de asistencia sobre dotación" items={TENDENCIAS.presentismo} />
-            <ColumnChart title="Ausentismo mensual" subtitle="% de jornadas no trabajadas" items={TENDENCIAS.ausentismo} color="#a83232" />
-            <ColumnChart title="Horas extra" subtitle="Total de horas al 50% y 100%" items={TENDENCIAS.extras} color="#9a6a10" />
-            <ColumnChart title="Rotación de personal" subtitle="% mensual de altas y bajas" items={TENDENCIAS.rotacion} color="#6b4a9e" />
+            <ColumnChart title="Ausentismo mensual" subtitle="% de jornadas no trabajadas" items={TENDENCIAS.ausentismo} color="var(--bad-fg)" />
+            <ColumnChart title="Horas extra" subtitle="Total de horas al 50% y 100%" items={TENDENCIAS.extras} color="var(--warn-fg)" />
+            <ColumnChart title="Rotación de personal" subtitle="% mensual de altas y bajas" items={TENDENCIAS.rotacion} color="var(--vio-fg)" />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -138,7 +138,7 @@ export default function Inicio() {
               <div className="text-[13px] font-bold mb-[14px]">Empleados por turno</div>
               <BarList
                 labelWidth={68}
-                color="#6b4a9e"
+                color="var(--vio-fg)"
                 items={catalogoApi.turnosNombres().map((t) => ({
                   label: t,
                   value: base.filter((e) => e.turno === t).length
@@ -147,7 +147,7 @@ export default function Inicio() {
             </Card>
             <Card className="px-[18px]">
               <div className="text-[13px] font-bold mb-[14px]">Distribución de licencias</div>
-              <BarList labelWidth={96} color="#9a6a10" items={LICENCIAS} />
+              <BarList labelWidth={96} color="var(--warn-fg)" items={LICENCIAS} />
             </Card>
           </div>
         </div>
@@ -173,7 +173,7 @@ export default function Inicio() {
                     <div className="text-xs text-muted leading-[1.5] text-pretty">{a.body}</div>
                     <button
                       onClick={() => setRuta(a.ruta)}
-                      className="mt-[7px] px-[10px] py-[5px] border border-[#e2ded6] rounded-[7px] bg-surface text-[11.5px] font-bold text-brand hover:bg-brand-soft"
+                      className="mt-[7px] px-[10px] py-[5px] border border-linestrong rounded-[7px] bg-surface text-[11.5px] font-bold text-brand hover:bg-brand-soft"
                     >
                       {a.cta}
                     </button>
@@ -193,7 +193,7 @@ export default function Inicio() {
                 <Avatar emp={e} />
                 <span className="flex-1 min-w-0">
                   <span className="block text-[12.5px] font-bold">{e.full}</span>
-                  <span className="block text-[11px] text-[#8b8880]">
+                  <span className="block text-[11px] text-muted3">
                     {e.puesto} · {e.suc.replace(catalogo.unidad + ' ', '')}
                   </span>
                 </span>

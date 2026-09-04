@@ -58,7 +58,7 @@ export default function Empleados({ accion, onAccionConsumida }) {
       <FilterBar
         right={
           <>
-            <span className="font-mono text-xs text-[#8b8880]">
+            <span className="font-mono text-xs text-muted3">
               {rows.length} de {total} empleados
             </span>
             {can('employees', 'create') && (

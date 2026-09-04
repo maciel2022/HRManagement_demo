@@ -3,7 +3,7 @@ import { TONOS } from '@/lib/format';
 
 export function Tabs({ tabs, value, onChange }) {
   return (
-    <div className="flex gap-1 p-[5px] bg-[#efeee9] rounded-[11px] overflow-x-auto flex-wrap">
+    <div className="flex gap-1 p-[5px] bg-surface3 rounded-[11px] overflow-x-auto flex-wrap">
       {tabs.map((t) => {
         const on = value === t.id;
         return (
@@ -12,7 +12,7 @@ export function Tabs({ tabs, value, onChange }) {
             onClick={() => onChange(t.id)}
             className={
               'whitespace-nowrap px-[13px] py-2 rounded-lg text-[12.5px] font-bold border ' +
-              (on ? 'bg-surface border-line text-brand' : 'bg-transparent border-transparent text-muted hover:bg-[#f2f0ec]')
+              (on ? 'bg-surface border-line text-brand' : 'bg-transparent border-transparent text-muted hover:bg-surface3')
             }
           >
             {t.label}

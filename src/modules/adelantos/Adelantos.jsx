@@ -49,7 +49,7 @@ export default function Adelantos({ accion, onAccionConsumida }) {
               {i + 1}
             </span>
             <span className="text-xs font-bold">{c}</span>
-            <Icon name="chevron_right" size={16} className="text-[#cfcac1]" />
+            <Icon name="chevron_right" size={16} className="text-linestrong" />
           </span>
         ))}
         <div className="flex-1" />
@@ -117,13 +117,13 @@ export default function Adelantos({ accion, onAccionConsumida }) {
                   <div className="flex gap-[6px]">
                     <button
                       onClick={() => decidir(a.id, 'Rechazado')}
-                      className="px-[10px] py-[6px] border border-[#f0d4d4] rounded-lg bg-surface text-[11.5px] font-bold text-bad hover:bg-bad-soft"
+                      className="px-[10px] py-[6px] border border-bad-soft rounded-lg bg-surface text-[11.5px] font-bold text-bad hover:bg-bad-soft"
                     >
                       Rechazar
                     </button>
                     <button
                       onClick={() => decidir(a.id, 'Aprobado')}
-                      className="px-[10px] py-[6px] rounded-lg bg-brand text-white text-[11.5px] font-bold hover:bg-brand-dark"
+                      className="px-[10px] py-[6px] rounded-lg bg-brand text-brandink text-[11.5px] font-bold hover:bg-brand-dark"
                     >
                       Aprobar
                     </button>

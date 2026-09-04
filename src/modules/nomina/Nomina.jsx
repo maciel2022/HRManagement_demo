@@ -52,14 +52,14 @@ export default function Nomina() {
           <button
             key={p.id}
             onClick={() => setPeriodo(p.name)}
-            className="text-left bg-surface rounded-[13px] px-4 py-[15px] hover:bg-[#faf9f7]"
-            style={{ border: '1.5px solid ' + (periodo === p.name ? '#12665c' : '#e6e3dd') }}
+            className="text-left bg-surface rounded-[13px] px-4 py-[15px] hover:bg-surface2"
+            style={{ border: '1.5px solid ' + (periodo === p.name ? 'var(--brand)' : 'var(--line)') }}
           >
             <div className="flex items-center justify-between gap-[10px] mb-[9px]">
               <span className="text-[13px] font-bold">{p.name}</span>
               <Chip estado={p.status} />
             </div>
-            <div className="font-mono text-[11.5px] text-[#8b8880]">
+            <div className="font-mono text-[11.5px] text-muted3">
               {p.employees} empleados · pago {p.payment_date}
             </div>
           </button>
@@ -117,7 +117,7 @@ export default function Nomina() {
                 header: '',
                 cell: ({ emp }) => (
                   <button
-                    className="px-[11px] py-[6px] border border-[#e2ded6] rounded-lg bg-surface text-xs font-bold text-brand hover:bg-brand-soft whitespace-nowrap"
+                    className="px-[11px] py-[6px] border border-linestrong rounded-lg bg-surface text-xs font-bold text-brand hover:bg-brand-soft whitespace-nowrap"
                     onClick={(ev) => {
                       ev.stopPropagation();
                       setRecibo(emp);

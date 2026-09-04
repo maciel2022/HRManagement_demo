@@ -87,7 +87,7 @@ export default function EmpleadoPerfil({ empId, onBack }) {
             <button
               key={a.label}
               onClick={() => setAccion(a.label)}
-              className="flex items-center gap-[6px] px-[11px] py-[7px] border border-[#e2ded6] rounded-[9px] bg-surface text-xs font-bold text-ink2 hover:bg-brand-soft hover:text-brand"
+              className="flex items-center gap-[6px] px-[11px] py-[7px] border border-linestrong rounded-[9px] bg-surface text-xs font-bold text-ink2 hover:bg-brand-soft hover:text-brand"
             >
               <Icon name={a.icon} size={16} /> {a.label}
             </button>
@@ -201,7 +201,7 @@ export default function EmpleadoPerfil({ empId, onBack }) {
                   <span className="font-mono text-[12.5px] font-bold">Neto {ars(r.neto)}</span>
                   <Chip estado={r.estado} />
                   <button
-                    className="px-[11px] py-[6px] border border-[#e2ded6] rounded-lg bg-surface text-xs font-bold text-brand hover:bg-brand-soft"
+                    className="px-[11px] py-[6px] border border-linestrong rounded-lg bg-surface text-xs font-bold text-brand hover:bg-brand-soft"
                     onClick={() => setRecibo(r.periodo)}
                   >
                     Ver recibo
@@ -282,7 +282,7 @@ export default function EmpleadoPerfil({ empId, onBack }) {
                     <span>{o.n}</span>
                     <span className="font-mono text-muted">{o.prog}%</span>
                   </div>
-                  <ProgressBar pct={o.prog} color="#2f5fa8" height={7} />
+                  <ProgressBar pct={o.prog} color="var(--info-fg)" height={7} />
                 </div>
               ))}
             </Card>

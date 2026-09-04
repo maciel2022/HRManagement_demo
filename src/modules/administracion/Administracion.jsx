@@ -18,7 +18,7 @@ const TABS = [
 
 const MODULOS_PERM = ['Empleados', 'Asistencia', 'Turnos', 'Licencias', 'Nómina', 'Adelantos', 'Reportes', 'Configuración'];
 const NIVEL = {
-  0: { t: 'Sin acceso', bg: '#f6f5f2', fg: '#a5a29a' },
+  0: { t: 'Sin acceso', bg: 'var(--canvas)', fg: 'var(--muted-2)' },
   1: { t: 'Total', ...TONOS.ok },
   2: { t: 'Su sucursal', ...TONOS.info },
   3: { t: 'Propio', ...TONOS.vio }
@@ -191,7 +191,7 @@ export default function Administracion() {
             <div className="overflow-x-auto">
               <table className="w-full border-collapse text-xs">
                 <thead>
-                  <tr className="bg-[#faf9f7]">
+                  <tr className="bg-surface2">
                     <th className="th pl-5">Rol</th>
                     {MODULOS_PERM.map((m) => (
                       <th key={m} className="th text-center">
@@ -248,7 +248,7 @@ export default function Administracion() {
                           </span>
                         ))
                       ) : (
-                        <span className="chip" style={{ background: '#f6f5f2', color: '#a5a29a' }}>
+                        <span className="chip" style={{ background: 'var(--canvas)', color: 'var(--muted-2)' }}>
                           Sin acceso
                         </span>
                       )}
