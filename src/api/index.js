@@ -16,12 +16,43 @@ export function alcance(emps, { sucursal, rol }) {
 
 const activos = () => getDb().emps.filter((e) => e.estado !== 'Baja');
 
+// Reparte el plantel de una sucursal entre los turnos concretos.
+// Los rotativos no tienen turno fijo: van al que menos gente tiene, que es como
+// se cubre una grilla real y evita que un turno quede vacío por el sesgo del
+// generador. El orden por legajo mantiene el reparto estable entre recargas.
+function repartirTurnos(empsSucursal, turnos) {
+  const porTurno = {};
+  turnos.forEach((t) => (porTurno[t] = []));
+  empsSucursal
+    .filter((e) => e.turno !== 'Rotativo')
+    .forEach((e) => porTurno[e.turno]?.push(e));
+  empsSucursal
+    .filter((e) => e.turno === 'Rotativo')
+    .sort((a, b) => a.id - b.id)
+    .forEach((e) =>
+      porTurno[turnos.reduce((m, t) => (porTurno[t].length < porTurno[m].length ? t : m), turnos[0])].push(e)
+    );
+  return porTurno;
+}
+
 /* ---------- Catálogos del perfil activo ---------- */
 
 export const catalogoApi = {
   sucursalesNombres: () => getDb().branches.map((b) => b.name),
   areasNombres: () => getDb().departments.map((d) => d.name),
-  puestosNombres: () => getDb().positions.map((p) => p.name),
+  // Sin área devuelve todos los puestos; con área, sólo los suyos.
+  puestosNombres: (area) => {
+    const db = getDb();
+    if (!area || area === 'Todas') return db.positions.map((p) => p.name);
+    const dep = db.departments.find((d) => d.name === area);
+    return dep ? db.positions.filter((p) => p.department_id === dep.id).map((p) => p.name) : [];
+  },
+  // Áreas con presencia en turnos: las de oficina no rotan.
+  areasOperativas: () => {
+    const db = getDb();
+    const oficina = new Set(db.catalog.officeDepartments ?? []);
+    return db.departments.map((d) => d.name).filter((n) => !oficina.has(n));
+  },
   turnosNombres: () => getDb().shifts.map((s) => s.name),
   turnosConHorario: () =>
     getDb().shifts.map((s) => (s.start_time ? `${s.name} (${s.start_time}–${s.end_time})` : s.name)),
@@ -99,20 +130,81 @@ export const turnosApi = {
   async semana({ sucursal, rol }) {
     return resolve(alcance(activos(), { sucursal, rol }));
   },
-  async cobertura() {
+  async cobertura(filtros = {}) {
     const db = getDb();
+    const { sucursal, rol, area, puesto, turno } = filtros;
+    const turnos = db.shifts.filter((s) => !s.rotating);
+    const operativas = new Set(catalogoApi.areasOperativas());
+    const plantel = alcance(activos(), { sucursal, rol }).filter((e) => operativas.has(e.area));
+    const pasaFiltro = (e) =>
+      (!area || area === 'Todas' || e.area === area) && (!puesto || puesto === 'Todos' || e.puesto === puesto);
+
     const out = [];
     db.branches.forEach((b) => {
-      db.shifts
-        .filter((s) => !s.rotating)
-        .forEach((s) => {
-          const asignados = db.emps.filter(
-            (e) => e.suc === b.name && e.estado !== 'Baja' && (e.turno === s.name || e.turno === 'Rotativo')
-          ).length;
-          out.push({ sucursal: b.name, turno: s.name, asignados, requeridos: s.required_staff || 4 });
+      if (sucursal && sucursal !== 'Todas las sucursales' && b.name !== sucursal) return;
+      // El reparto se hace sobre el plantel completo de la sucursal y recién
+      // después se filtra: a qué turno cae un rotativo es una propiedad de la
+      // grilla, no de lo que el usuario esté mirando.
+      const porTurno = repartirTurnos(plantel.filter((e) => e.suc === b.name), turnos.map((t) => t.name));
+      turnos.forEach((s) => {
+        if (turno && turno !== 'Todos' && s.name !== turno) return;
+        const asignadosTurno = porTurno[s.name].filter(pasaFiltro);
+        const reqs = db.staffing_requirements.filter(
+          (r) => r.branch_id === b.id && r.shift_id === s.id && (!area || area === 'Todas' || db.departments[r.department_id - 1].name === area)
+        );
+        const areasVistas = new Set([
+          ...asignadosTurno.map((e) => e.area),
+          ...reqs.map((r) => db.departments[r.department_id - 1].name)
+        ]);
+        const porArea = [...areasVistas]
+          .map((a) => ({
+            area: a,
+            asignados: asignadosTurno.filter((e) => e.area === a).length,
+            requeridos: reqs.filter((r) => db.departments[r.department_id - 1].name === a)
+              .reduce((n, r) => n + r.required_staff, 0)
+          }))
+          .sort((x, y) => y.requeridos - x.requeridos || y.asignados - x.asignados || x.area.localeCompare(y.area));
+        out.push({
+          sucursal: b.name,
+          turno: s.name,
+          horario: s.start_time ? s.start_time + ' – ' + s.end_time : '',
+          asignados: asignadosTurno.length,
+          // El requerido del turno es la suma de sus áreas: un solo número.
+          requeridos: reqs.reduce((n, r) => n + r.required_staff, 0),
+          porArea
         });
+      });
     });
     return resolve(out);
+  },
+  // Conteo de personal por área; al elegir un área, por puesto dentro de ella.
+  async conteos(filtros = {}) {
+    const db = getDb();
+    const { sucursal, rol, area, puesto, turno } = filtros;
+    const turnos = db.shifts.filter((s) => !s.rotating).map((t) => t.name);
+    const operativas = new Set(catalogoApi.areasOperativas());
+    const plantel = alcance(activos(), { sucursal, rol }).filter((e) => operativas.has(e.area));
+
+    let visibles = plantel;
+    if (turno && turno !== 'Todos') {
+      visibles = db.branches.flatMap((b) => {
+        if (sucursal && sucursal !== 'Todas las sucursales' && b.name !== sucursal) return [];
+        return repartirTurnos(plantel.filter((e) => e.suc === b.name), turnos)[turno] ?? [];
+      });
+    }
+    if (area && area !== 'Todas') visibles = visibles.filter((e) => e.area === area);
+    if (puesto && puesto !== 'Todos') visibles = visibles.filter((e) => e.puesto === puesto);
+
+    const agrupar = (clave) => {
+      const m = new Map();
+      visibles.forEach((e) => m.set(e[clave], (m.get(e[clave]) ?? 0) + 1));
+      return [...m.entries()].map(([label, total]) => ({ label, total })).sort((a, b) => b.total - a.total || a.label.localeCompare(b.label));
+    };
+    return resolve({
+      agrupadoPor: area && area !== 'Todas' ? 'puesto' : 'área',
+      items: agrupar(area && area !== 'Todas' ? 'puesto' : 'area'),
+      total: visibles.length
+    });
   },
   definiciones: () => getDb().shifts,
   async asignar(emp, dia, ctx) {
