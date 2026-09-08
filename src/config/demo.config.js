@@ -79,6 +79,14 @@ export const DEMO_PROFILES = [
         { name: 'Noche', start: '22:00', end: '06:00', tolerance: 15, night: true, rotating: false, required: 3 },
         { name: 'Rotativo', start: null, end: null, tolerance: 10, night: null, rotating: true, required: 0 }
       ],
+      // Dotación tentativa por turno y área, aplicada a todas las sucursales.
+      // El requerido de cada turno es la suma de sus áreas: un solo número,
+      // así la ficha del turno y su desglose no pueden contradecirse.
+      dotacion: {
+        'Mañana': { 'Playa': 2, 'Tienda': 1 },
+        'Tarde': { 'Playa': 1, 'Caja': 1 },
+        'Noche': { 'Playa': 1, 'Caja': 1 }
+      },
       trainings: [
         { name: 'Seguridad e higiene', mandatory: true, hours: 8, validityMonths: 12 },
         { name: 'Prevención de incendios', mandatory: true, hours: 6, validityMonths: 12 },
@@ -183,6 +191,11 @@ export const DEMO_PROFILES = [
         { name: 'Noche', start: '22:00', end: '06:00', tolerance: 15, night: true, rotating: false, required: 2 },
         { name: 'Rotativo', start: null, end: null, tolerance: 10, night: null, rotating: true, required: 0 }
       ],
+      dotacion: {
+        'Mañana': { 'Salón': 1, 'Caja': 1 },
+        'Tarde': { 'Salón': 1, 'Visual': 1 },
+        'Noche': { 'Salón': 1, 'Caja': 1 }
+      },
       trainings: [
         { name: 'Seguridad e higiene', mandatory: true, hours: 8, validityMonths: 12 },
         { name: 'Prevención de incendios', mandatory: true, hours: 6, validityMonths: 12 },
@@ -287,6 +300,11 @@ export const DEMO_PROFILES = [
         { name: 'Noche', start: '22:00', end: '06:00', tolerance: 15, night: true, rotating: false, required: 4 },
         { name: 'Rotativo', start: null, end: null, tolerance: 10, night: null, rotating: true, required: 0 }
       ],
+      dotacion: {
+        'Mañana': { 'Depósito': 2, 'Distribución': 1 },
+        'Tarde': { 'Depósito': 1, 'Control de stock': 1 },
+        'Noche': { 'Depósito': 1, 'Distribución': 1 }
+      },
       trainings: [
         { name: 'Seguridad e higiene', mandatory: true, hours: 8, validityMonths: 12 },
         { name: 'Prevención de incendios', mandatory: true, hours: 6, validityMonths: 12 },

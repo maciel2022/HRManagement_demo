@@ -39,6 +39,25 @@ function buildDatabase(profile) {
   }));
 
   const findBy = (arr, name) => arr.find((x) => x.name === name);
+
+  // Dotación requerida por sucursal, turno y área. El perfil la declara una sola
+  // vez (cat.dotacion) y acá se expande a la tabla que consulta la aplicación.
+  const staffing_requirements = [];
+  branches.forEach((b) =>
+    Object.entries(cat.dotacion ?? {}).forEach(([turno, porArea]) => {
+      const shift = findBy(shifts, turno);
+      if (!shift) return;
+      Object.entries(porArea).forEach(([area, required]) => {
+        const dep = findBy(departments, area);
+        if (!dep) return;
+        staffing_requirements.push({
+          id: staffing_requirements.length + 1, branch_id: b.id, shift_id: shift.id,
+          department_id: dep.id, required_staff: required
+        });
+      });
+    })
+  );
+
   const employees = emps.map((e) => ({
     id: e.id + 1, file_number: e.legajo, first_name: e.nombre, last_name: e.apellido,
     dni: e.dni, cuil: e.cuil, birth_date: e.nac, address: e.dir, city: e.ciudad, province: e.prov,
@@ -197,7 +216,7 @@ function buildDatabase(profile) {
     // vistas de dominio
     emps, detalles, reqs, adels, incs,
     // esquema normalizado
-    branches, departments, positions, shifts, employees, attendance_records, attendance_incidents,
+    branches, departments, positions, shifts, staffing_requirements, employees, attendance_records, attendance_incidents,
     leave_types, leave_requests, leave_balances, payroll_periods, payslips, document_types, documents,
     trainings, training_records, competencies, performance_reviews, review_scores, equipment_items,
     equipment_issues, announcements, announcement_reads: [], holidays, roles, users, import_batches,

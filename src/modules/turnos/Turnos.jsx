@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSession } from '@/context/SessionContext';
 import { turnosApi, catalogoApi } from '@/api';
-import { Avatar, Card, Chip, FormFields, Icon, Modal, ModalFooter, Panel, ProgressBar, Tabs } from '@/components/ui';
+import { Avatar, Card, Chip, FilterBar, FormFields, Icon, Modal, ModalFooter, Panel, ProgressBar, Select, Tabs } from '@/components/ui';
 import { TONOS } from '@/lib/format';
 import { getDb } from '@/data/database';
 
 const VISTAS = [
   { id: 'semana', label: 'Semanal' },
-  { id: 'mes', label: 'Mensual' },
-  { id: 'sucursal', label: 'Por sucursal' }
+  { id: 'mes', label: 'Mensual' }
 ];
 
 const DIAS = [
@@ -25,7 +24,7 @@ const tonoTurno = (t, defs) => {
 };
 
 export default function Turnos() {
-  const { sucursal, rol, ctx, toastMsg } = useSession();
+  const { sucursal, rol, ctx, toastMsg, filtros, setFiltros, resetFiltros } = useSession();
   const [vista, setVista] = useState('semana');
   const [emps, setEmps] = useState([]);
   const [cobertura, setCobertura] = useState([]);
@@ -40,10 +39,54 @@ export default function Turnos() {
     { n: 'Franco', h: 'Descanso semanal', tone: 'grey' }
   ];
 
+  const consulta = { sucursal, rol, area: filtros.area, puesto: filtros.puesto, turno: filtros.turno };
+
+  // Las tres vistas comparten los mismos filtros: si la grilla los ignorara,
+  // en la vista inicial los controles parecerían no hacer nada.
   useEffect(() => {
-    turnosApi.semana({ sucursal, rol }).then((r) => setEmps(r.slice(0, 16)));
-    turnosApi.cobertura().then(setCobertura);
-  }, [sucursal, rol]);
+    turnosApi.semana(consulta).then((r) => setEmps(r.slice(0, 16)));
+    turnosApi.cobertura(consulta).then(setCobertura);
+  }, [sucursal, rol, filtros.area, filtros.puesto, filtros.turno]);
+
+  const areasOpt = ['Todas', ...catalogoApi.areasOperativas()];
+  // El puesto se acota al área elegida: sin área, se ofrecen todos.
+  const puestosOpt = ['Todos', ...catalogoApi.puestosNombres(filtros.area)];
+  const turnosOpt = ['Todos', ...defs.filter((d) => !d.rotating).map((d) => d.name)];
+
+  // Cambiar de área invalida el puesto elegido si ya no pertenece a ella.
+  const cambiarArea = (area) => {
+    const sigueValiendo = area === 'Todas' || catalogoApi.puestosNombres(area).includes(filtros.puesto);
+    setFiltros({ area, puesto: sigueValiendo ? filtros.puesto : 'Todos' });
+  };
+
+  const estadoDotacion = (asignados, requeridos) => {
+    if (requeridos === 0) return { label: 'Sin dotación definida', tone: TONOS.grey };
+    if (asignados === requeridos) return { label: 'Dotación completa', tone: TONOS.ok };
+    if (asignados < requeridos) return { label: 'Faltan ' + (requeridos - asignados), tone: TONOS.bad };
+    return { label: 'Sobredotación +' + (asignados - requeridos), tone: TONOS.warn };
+  };
+
+  // El faltante se suma por área, no con el neto del turno: un playero de más no
+  // cubre a un cajero que falta, y con el neto una ficha podía decir "Dotación
+  // completa" mientras el desglose mostraba un área en cero.
+  // Sin faltantes el turno está cubierto: tener gente de más es cobertura, no un
+  // problema. La sobredotación se avisa sólo cuando es significativa.
+  const EXCESO_AVISO = 2;
+  const estadoTurno = (porArea) => {
+    if (!porArea.length) return { label: 'Sin dotación definida', tone: TONOS.grey };
+    const cortas = porArea.filter((a) => a.asignados < a.requeridos);
+    const faltan = cortas.reduce((n, a) => n + (a.requeridos - a.asignados), 0);
+    // El chip dice DÓNDE falta: el total del turno puede cuadrar (3/3) mientras
+    // falta un playero y sobra un cajero, y ahí "Faltan 1" parecería un error.
+    if (faltan)
+      return {
+        label: 'Faltan ' + faltan + (cortas.length === 1 ? ' en ' + cortas[0].area : ' en ' + cortas.length + ' áreas'),
+        tone: TONOS.bad
+      };
+    const exceso = porArea.reduce((n, a) => n + a.asignados - a.requeridos, 0);
+    if (exceso >= EXCESO_AVISO) return { label: 'Sobredotación +' + exceso, tone: TONOS.warn };
+    return { label: 'Dotación completa', tone: TONOS.ok };
+  };
 
   const grilla = useMemo(
     () =>
@@ -68,6 +111,25 @@ export default function Turnos() {
 
   return (
     <div className="flex flex-col gap-4">
+      <FilterBar
+        right={
+          <button
+            className="btn-ghost"
+            onClick={() => {
+              resetFiltros();
+              toastMsg('Filtros restablecidos');
+            }}
+          >
+            Limpiar
+          </button>
+        }
+      >
+        <span className="text-xs font-bold text-ink2 mr-1">Filtros</span>
+        <Select value={filtros.area} onChange={cambiarArea} options={areasOpt} prefix="Área" />
+        <Select value={filtros.puesto} onChange={(v) => setFiltros({ puesto: v })} options={puestosOpt} prefix="Puesto" />
+        <Select value={filtros.turno} onChange={(v) => setFiltros({ turno: v })} options={turnosOpt} prefix="Turno" />
+      </FilterBar>
+
       <div className="flex items-center gap-[10px] flex-wrap">
         <Tabs tabs={VISTAS} value={vista} onChange={setVista} />
         <div className="flex-1" />
@@ -159,23 +221,62 @@ export default function Turnos() {
         </Card>
       )}
 
-      {vista === 'sucursal' && (
-        <div className="grid gap-[14px] [grid-template-columns:repeat(auto-fill,minmax(300px,1fr))]">
+      {vista === 'semana' && (
+        <div className="flex flex-col gap-[10px]">
+          <div className="px-1">
+            <div className="text-[13.5px] font-bold">Cobertura por sucursal</div>
+            <div className="text-xs text-muted mt-[3px]">
+              Personal asignado sobre la dotación requerida de cada turno
+            </div>
+          </div>
+          <div
+            data-test="cobertura"
+            className="grid gap-[14px] [grid-template-columns:repeat(auto-fill,minmax(300px,1fr))]"
+          >
           {cobertura.map((c) => {
-            const ok = c.asignados >= c.requeridos;
+            const est = estadoTurno(c.porArea);
+            const pct = c.requeridos ? Math.min(100, Math.round((c.asignados / c.requeridos) * 100)) : 100;
             return (
               <Card key={c.sucursal + c.turno} className="px-[18px]">
                 <div className="flex items-center justify-between gap-[10px] mb-[10px]">
                   <span className="text-[13px] font-bold">{catalogoApi.corta(c.sucursal)}</span>
-                  <Chip estado={ok ? 'Cubierto' : 'Falta personal'} />
+                  <Chip tone={est.tone}>{est.label}</Chip>
                 </div>
-                <div className="text-xs text-muted mb-[10px]">
-                  Turno {c.turno} — {c.asignados} de {c.requeridos} requeridos
+                <div className="flex items-baseline gap-[7px] mb-[9px]">
+                  <span className="text-xs text-muted">
+                    Turno {c.turno}
+                    {c.horario && <span className="font-mono text-muted2"> · {c.horario}</span>}
+                  </span>
+                  <div className="flex-1" />
+                  <span className="font-mono text-[13px] font-extrabold" style={{ color: est.tone.fg }}>
+                    {c.asignados} / {c.requeridos}
+                  </span>
                 </div>
-                <ProgressBar pct={Math.min(100, Math.round((c.asignados / c.requeridos) * 100))} color={ok ? 'var(--ok-fg)' : 'var(--bad-fg)'} />
+                <ProgressBar pct={pct} color={est.tone.fg} />
+                {c.porArea.length > 0 && (
+                  <div className="mt-[13px] pt-[11px] border-t border-line2 flex flex-col gap-[6px]">
+                    {c.porArea.map((a) => {
+                      const e = estadoDotacion(a.asignados, a.requeridos);
+                      return (
+                        <div key={a.area} className="flex items-center gap-2 text-[11.5px]">
+                          <span className="flex-1 truncate text-ink2 font-semibold">{a.area}</span>
+                          <span className="font-mono font-bold" style={{ color: e.tone.fg }}>
+                            {a.asignados} / {a.requeridos}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </Card>
             );
           })}
+            {!cobertura.length && (
+              <Card className="px-[18px] text-xs text-muted">
+                Ningún turno coincide con los filtros seleccionados.
+              </Card>
+            )}
+          </div>
         </div>
       )}
 
