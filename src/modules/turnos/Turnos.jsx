@@ -7,8 +7,7 @@ import { getDb } from '@/data/database';
 
 const VISTAS = [
   { id: 'semana', label: 'Semanal' },
-  { id: 'mes', label: 'Mensual' },
-  { id: 'sucursal', label: 'Por sucursal' }
+  { id: 'mes', label: 'Mensual' }
 ];
 
 const DIAS = [
@@ -222,11 +221,18 @@ export default function Turnos() {
         </Card>
       )}
 
-      {vista === 'sucursal' && (
-        <div
-          data-test="cobertura"
-          className="grid gap-[14px] [grid-template-columns:repeat(auto-fill,minmax(300px,1fr))]"
-        >
+      {vista === 'semana' && (
+        <div className="flex flex-col gap-[10px]">
+          <div className="px-1">
+            <div className="text-[13.5px] font-bold">Cobertura por sucursal</div>
+            <div className="text-xs text-muted mt-[3px]">
+              Personal asignado sobre la dotación requerida de cada turno
+            </div>
+          </div>
+          <div
+            data-test="cobertura"
+            className="grid gap-[14px] [grid-template-columns:repeat(auto-fill,minmax(300px,1fr))]"
+          >
           {cobertura.map((c) => {
             const est = estadoTurno(c.porArea);
             const pct = c.requeridos ? Math.min(100, Math.round((c.asignados / c.requeridos) * 100)) : 100;
@@ -265,11 +271,12 @@ export default function Turnos() {
               </Card>
             );
           })}
-          {!cobertura.length && (
-            <Card className="px-[18px] text-xs text-muted">
-              Ningún turno coincide con los filtros seleccionados.
-            </Card>
-          )}
+            {!cobertura.length && (
+              <Card className="px-[18px] text-xs text-muted">
+                Ningún turno coincide con los filtros seleccionados.
+              </Card>
+            )}
+          </div>
         </div>
       )}
 
